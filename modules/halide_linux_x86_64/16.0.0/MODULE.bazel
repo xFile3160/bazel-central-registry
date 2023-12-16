@@ -1,7 +1,7 @@
 """Module halide_linux to modularize the dependencies from halide linux version."""
 
 module(
-    name = "halide_linux",
+    name = "halide_linux_x86_64",
     version = "16.0.0",
     compatibility_level = 1,
 )

@@ -19,7 +19,7 @@ index 000000000..27e0c51ea
 --- /dev/null
 +++ b/MODULE.bazel
 @@ -0,0 +1,4 @@
-+module(name = "halide_linux", version = "16.0.0")
++module(name = "halide_linux_x86_64", version = "16.0.0")
 +
 +bazel_dep(name = "rules_cc", version = "0.0.9")
 +bazel_dep(name = "bazel_skylib", version = "1.4.2")
