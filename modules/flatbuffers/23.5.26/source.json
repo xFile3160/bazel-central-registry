@@ -3,7 +3,8 @@
     "patch_strip": 1,
     "patches": {
         "add_build_file.patch": "sha256-vInqZLLRGFNL1xAeBwXPWw1jNLmJNN8rAFCrSHmivCw=",
-        "add_module_dot_bazel.patch": "sha256-mqXLZXPF2iVRz/LBOlcPQD5xxQJINBr2iINbuXglOGg="
+        "add_module_dot_bazel.patch": "sha256-mqXLZXPF2iVRz/LBOlcPQD5xxQJINBr2iINbuXglOGg=",
+        "fix_build_defs.patch": "sha256-o3hj2Slhjato+dLBPcGthcwUnzhPbU+r/3JcQDUTH5g="
     },
     "strip_prefix": "flatbuffers-23.5.26",
     "url": "https://github.com/google/flatbuffers/archive/refs/tags/v23.5.26.tar.gz"
