@@ -1,7 +1,7 @@
-From 2a7a8eec252b6b779e769b7d316c3842baa2a081 Mon Sep 17 00:00:00 2001
+From 7dd9cf0f30c97879aad014a42866970e622471b3 Mon Sep 17 00:00:00 2001
 From: Cesare Mercurio <cesare.mercurio@gmail.com>
 Date: Fri, 15 Dec 2023 23:37:28 -0800
-Subject: [PATCH 2/2] VVI-Halide-patch: add BUILD file
+Subject: [PATCH] VVI-Halide-patch: add BUILD file
 
 Summary:
 Adds build file for bazel environment
@@ -10,9 +10,9 @@ Test plan:
 integration in vvplatform
 ---
  .gitignore |   2 +-
- BUILD      |  56 ++++
+ BUILD      | 221 +++++++++++++
  halide.bzl | 900 +++++++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 957 insertions(+), 1 deletion(-)
+ 3 files changed, 1122 insertions(+), 1 deletion(-)
  create mode 100644 BUILD
  create mode 100644 halide.bzl
 
@@ -31,10 +31,175 @@ index 4a19876f8..9a022a37f 100644
  
 diff --git a/BUILD b/BUILD
 new file mode 100644
-index 000000000..b3dc3913d
+index 000000000..492713b5b
 --- /dev/null
 +++ b/BUILD
-@@ -0,0 +1,56 @@
+@@ -0,0 +1,221 @@
++config_setting(
++    name = "linux_base",
++    define_values = {
++        "linux_base": "true",
++    },
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "host",
++    define_values = {
++        "host": "true",
++    },
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "linux",
++    define_values = {
++        "linux": "true",
++        "linux_base": "true",
++        "host": "true",
++    },
++    visibility = ["//visibility:public"],
++)
++
++# Note: yes, these need to use "//external:android/crosstool", not
++# @androidndk//:default_crosstool.
++
++config_setting(
++    name = "android",
++    values = {"crosstool_top": "//external:android/crosstool"},
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "android_x86",
++    values = {
++        "crosstool_top": "//external:android/crosstool",
++        "cpu": "x86",
++    },
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "android_x86_64",
++    values = {
++        "crosstool_top": "//external:android/crosstool",
++        "cpu": "x86_64",
++    },
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "android_arm",
++    values = {
++        "crosstool_top": "//external:android/crosstool",
++        "cpu": "armeabi-v7a",
++    },
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "android_arm64",
++    values = {
++        "crosstool_top": "//external:android/crosstool",
++        "cpu": "arm64-v8a",
++    },
++    visibility = ["//visibility:public"],
++)
++
++# Note: this cannot just match "apple_platform_type": "macos" because that option
++# defaults to "macos" even when building on Linux!
++alias(
++    name = "macos",
++    actual = select({
++        ":macos_i386": ":macos_i386",
++        ":macos_x86_64": ":macos_x86_64",
++        ":macos_arm64": ":macos_arm64",
++        "//conditions:default": ":macos_i386",  # Arbitrarily chosen from above.
++    }),
++    visibility = ["//visibility:public"],
++)
++
++# Note: this also matches on crosstool_top so that it does not produce ambiguous
++# selectors when used together with "android".
++config_setting(
++    name = "ios",
++    values = {
++        "crosstool_top": "@bazel_tools//tools/cpp:toolchain",
++        "apple_platform_type": "ios",
++    },
++    visibility = ["//visibility:public"],
++)
++
++alias(
++    name = "apple",
++    actual = select({
++        ":macos": ":macos",
++        ":ios": ":ios",
++        "//conditions:default": ":ios",  # Arbitrarily chosen from above.
++    }),
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "macos_i386",
++    values = {
++        "apple_platform_type": "macos",
++        "cpu": "darwin",
++    },
++    define_values = {
++        "host": "true"
++    },
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "macos_x86_64",
++    values = {
++        "apple_platform_type": "macos",
++        "cpu": "darwin_x86_64",
++    },
++    define_values = {
++        "host": "true"
++    },
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "macos_arm64",
++    values = {
++        "apple_platform_type": "macos",
++        "cpu": "darwin_arm64",
++    },
++    define_values = {
++        "host": "true"
++    },
++    visibility = ["//visibility:public"],
++)
++
++[
++    config_setting(
++        name = arch,
++        values = {"cpu": arch},
++        visibility = ["//visibility:public"],
++    )
++    for arch in [
++        "ios_i386",
++        "ios_x86_64",
++        "ios_armv7",
++        "ios_arm64",
++        "ios_arm64e",
++    ]
++]
++
++config_setting(
++    name = "windows",
++    values = {"cpu": "x64_windows"},
++    define_values = {
++        "host": "true"
++    },
++    visibility = ["//visibility:public"],
++)
++
 +load(":halide.bzl", "halide_language_copts")
 +
 +licenses(["notice"])
@@ -94,7 +259,7 @@ index 000000000..b3dc3913d
 \ No newline at end of file
 diff --git a/halide.bzl b/halide.bzl
 new file mode 100644
-index 000000000..0b2a04238
+index 000000000..532c45d62
 --- /dev/null
 +++ b/halide.bzl
 @@ -0,0 +1,900 @@
@@ -122,7 +287,7 @@ index 000000000..0b2a04238
 +    ]
 +    return _common_opts + select({
 +        "//conditions:default": _posix_opts,
-+        "@vvplatform//:windows": _msvc_opts,
++        "//:windows": _msvc_opts,
 +    })
 +
 +def halide_language_linkopts():
@@ -140,8 +305,8 @@ index 000000000..0b2a04238
 +    _msvc_opts = []
 +    return select({
 +        "//conditions:default": _linux_opts,
-+        "@vvplatform//:macos": _osx_opts,
-+        "@vvplatform//:windows": _msvc_opts,
++        "//:macos": _osx_opts,
++        "//:windows": _msvc_opts,
 +    })
 +
 +def halide_runtime_linkopts():
@@ -161,30 +326,30 @@ index 000000000..0b2a04238
 +
 +    return select({
 +        "//conditions:default": _posix_opts,
-+        "@vvplatform//:android": _android_opts,
-+        "@vvplatform//:windows": _msvc_opts,
++        "//:android": _android_opts,
++        "//:windows": _msvc_opts,
 +    })
 +
 +# Map of halide-target-base -> config_settings
 +_HALIDE_TARGET_CONFIG_SETTINGS_MAP = {
 +    # Android
-+    "arm-32-android": ["@vvplatform//:android_arm"],
-+    "arm-64-android": ["@vvplatform//:android_arm64"],
-+    "x86-32-android": ["@vvplatform//:android_x86"],
-+    "x86-64-android": ["@vvplatform//:android_x86_64"],
++    "arm-32-android": ["//:android_arm"],
++    "arm-64-android": ["//:android_arm64"],
++    "x86-32-android": ["//:android_x86"],
++    "x86-64-android": ["//:android_x86_64"],
 +    # iOS
-+    "arm-32-ios": ["@vvplatform//:ios_armv7"],
-+    "arm-64-ios": ["@vvplatform//:ios_arm64", "@vvplatform//:ios_arm64e", "@vvplatform//:macos_arm64"],
++    "arm-32-ios": ["//:ios_armv7"],
++    "arm-64-ios": ["//:ios_arm64", "//:ios_arm64e", "//:macos_arm64"],
 +    # OSX (or iOS simulator)
 +    "x86-64-osx": [
-+        "@vvplatform//:macos_x86_64",
-+        "@vvplatform//:ios_x86_64",
-+        "@vvplatform//:macos_i386",
-+        "@vvplatform//:ios_i386",
++        "//:macos_x86_64",
++        "//:ios_x86_64",
++        "//:macos_i386",
++        "//:ios_i386",
 +    ],
-+    "arm-64-osx": ["@vvplatform//:macos_arm64", "@vvplatform//:ios_arm64", "@vvplatform//:ios_arm64e",],
++    "arm-64-osx": ["//:macos_arm64", "//:ios_arm64", "//:ios_arm64e",],
 +    # Windows
-+    "x86-64-windows": ["@vvplatform//:windows"],
++    "x86-64-windows": ["//:windows"],
 +    # Linux
 +    "x86-64-linux": ["//conditions:default"],
 +}
