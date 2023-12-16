@@ -1,7 +1,7 @@
-From 4d75d1a5201e3a477807f1d755e2a1234cef8188 Mon Sep 17 00:00:00 2001
+From d630dee374abb4e530250d7e573447b24d466509 Mon Sep 17 00:00:00 2001
 From: Cesare Mercurio <cesare.mercurio@gmail.com>
-Date: Sat, 16 Dec 2023 09:28:06 -0800
-Subject: [PATCH 2/2] VVI-flatbuffers-patch : Fix build bazel for npm packages
+Date: Sat, 16 Dec 2023 13:26:53 -0800
+Subject: [PATCH] VVI-flatbuffers-patch : Fix build bazel for npm packages
 
 Summary:
 Removes the dependency to npm for c++ only environment
