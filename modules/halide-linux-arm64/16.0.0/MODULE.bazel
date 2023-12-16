@@ -1,0 +1,10 @@
+"""Module halide_linux_arm64 to modularize the dependencies from halide linux arm64 version."""
+
+module(
+    name = "halide_linux_arm64",
+    version = "16.0.0",
+    compatibility_level = 1,
+)
+
+# to make sha256 work do this:
+# openssl dgst -sha256 -binary <file> | openssl base64 -A | sed 's/^/sha256-/'

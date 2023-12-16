@@ -1,0 +1,11 @@
+{
+    "homepage": "https://github.com/halide/Halide",
+    "maintainers": [],
+    "repository": [
+        "github:halide/Halide"
+    ],
+    "versions": [
+        "16.0.0"
+    ],
+    "yanked_versions": {}
+}

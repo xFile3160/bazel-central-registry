@@ -1,0 +1,4 @@
+platforms:
+  macos:
+    build_targets:
+    - '@halide_macos_arm64//:halide_macos_arm64'

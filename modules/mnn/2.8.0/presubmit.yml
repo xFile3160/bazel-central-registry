@@ -1,0 +1,16 @@
+platforms:
+  centos7:
+    build_targets:
+    - '@mnn//:mnn'
+  debian10:
+    build_targets:
+    - '@mnn//:mnn'
+  macos:
+    build_targets:
+    - '@mnn//:mnn'
+  ubuntu2004:
+    build_targets:
+    - '@mnn//:mnn'
+  windows:
+    build_targets:
+    - '@mnn//:mnn'

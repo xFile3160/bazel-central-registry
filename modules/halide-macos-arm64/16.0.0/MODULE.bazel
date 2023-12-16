@@ -1,0 +1,7 @@
+"""Module halide_macos_arm64 to modularize the dependencies from halide macos Mx version."""
+
+module(
+    name = "halide_macos_arm64",
+    version = "16.0.0",
+    compatibility_level = 1,
+)

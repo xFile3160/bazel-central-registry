@@ -1,0 +1,9 @@
+{
+    "integrity": "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
+    "patches": {
+        "add_build_file.patch": "sha256-MyiHeYijiwSe5sqPhv9LzDnBKX9i7FWPYHGMjccQCno=",
+        "add_module_dot_bazel.patch": "sha256-NfSKdZ2rniGhTbWLs6rMfsAZkTZXNpzGtkE24l+iJGs="
+    },
+    "strip_prefix": "Halide-16.0.0-arm-64-osx",
+    "url": "https://github.com/halide/Halide/releases/download/v16.0.0/Halide-16.0.0-arm-64-osx-1e963ff817ef0968cc25d811a25a7350c8953ee6.tar.gz"
+}

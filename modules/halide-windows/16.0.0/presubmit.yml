@@ -1,0 +1,4 @@
+platforms:
+  windows:
+    build_targets:
+    - '@halide_windows//:halide_windows'

@@ -1,0 +1,16 @@
+platforms:
+  centos7:
+    build_targets:
+    - '@flatbuffers//:flatbuffers'
+  debian10:
+    build_targets:
+    - '@flatbuffers//:flatbuffers'
+  macos:
+    build_targets:
+    - '@flatbuffers//:flatbuffers'
+  ubuntu2004:
+    build_targets:
+    - '@flatbuffers//:flatbuffers'
+  windows:
+    build_targets:
+    - '@flatbuffers//:flatbuffers'

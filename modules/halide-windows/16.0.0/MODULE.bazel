@@ -1,0 +1,7 @@
+"""Module halide_windows to modularize the dependencies from halide windows version."""
+
+module(
+    name = "halide_windows",
+    version = "16.0.0",
+    compatibility_level = 1,
+)

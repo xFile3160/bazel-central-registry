@@ -1,0 +1,7 @@
+"""Module halide_macos_x86_64 to modularize the dependencies from halide macos intel version."""
+
+module(
+    name = "halide_macos_x86_64",
+    version = "16.0.0",
+    compatibility_level = 1,
+)

@@ -1,0 +1,29 @@
+From 8a80306989c38e14055c8c9a4b2f659cba7b5c9c Mon Sep 17 00:00:00 2001
+From: Cesare Mercurio <cesare.mercurio@gmail.com>
+Date: Fri, 15 Dec 2023 23:39:13 -0800
+Subject: [PATCH 1/2] VVI-Halide-patch : add bzlmod module
+
+Summary:
+Adds module for blzmod registry
+
+Test Plan:
+integration with vvplatform
+---
+ MODULE.bazel | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 MODULE.bazel
+
+diff --git a/MODULE.bazel b/MODULE.bazel
+new file mode 100644
+index 000000000..27e0c51ea
+--- /dev/null
++++ b/MODULE.bazel
+@@ -0,0 +1,4 @@
++module(name = "halide_macos_x86_64", version = "16.0.0")
++
++bazel_dep(name = "rules_cc", version = "0.0.9")
++bazel_dep(name = "bazel_skylib", version = "1.4.2")
+\ No newline at end of file
+-- 
+2.34.1
+

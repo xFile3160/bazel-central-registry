@@ -1,0 +1,320 @@
+From bb9018d7353dd627cc48d24665acc4b1f4b09c5c Mon Sep 17 00:00:00 2001
+From: Cesare Mercurio <cesare.mercurio@gmail.com>
+Date: Sat, 16 Dec 2023 10:54:50 -0800
+Subject: [PATCH] VVI-mnn-patch : Add build stages for bazel bzlmod integration
+
+Summary:
+Adds build files for bzlmod and cmake_rules
+
+Test Plan:
+integration in vvplatform
+---
+ BUILD           |  85 +++++++++++++++++++++++++++++++++++++
+ cmake_rules.bzl | 110 ++++++++++++++++++++++++++++++++++++++++++++++++
+ platform.bzl    |  85 +++++++++++++++++++++++++++++++++++++
+ 3 files changed, 280 insertions(+)
+ create mode 100644 BUILD
+ create mode 100644 cmake_rules.bzl
+ create mode 100644 platform.bzl
+
+diff --git a/BUILD b/BUILD
+new file mode 100644
+index 00000000..76f3e843
+--- /dev/null
++++ b/BUILD
+@@ -0,0 +1,85 @@
++load("@rules_cc//cc:defs.bzl", "cc_library")
++load(":cmake_rules.bzl", "cmake_build")
++
++load(
++    ":platform.bzl",
++    "if_android_arm",
++    "if_android_arm64",
++    "if_darwin",
++    "if_darwin_arm64",
++    "if_ios_arm64",
++    "if_ios_armv7",
++    "if_linux",
++    "if_windows",
++)
++
++package(default_visibility = ["//visibility:public"])
++
++filegroup(
++    name = "all_srcs",
++    srcs = glob(["**"]),
++    visibility = ["//visibility:public"],
++)
++
++cmake_build(
++    name = "mnn",
++    srcs = [":all_srcs"],
++    libraries = [
++        "libMNN.a"
++    ] + if_darwin(["libMNNCoreML.a"])
++      + if_ios_arm64(["libMNNCoreML.a"])
++      + if_ios_armv7(["libMNNCoreML.a"])
++      + if_darwin_arm64(["libMNNCoreML.a"]),
++    path_to_bazel_byproducts = "third_party/mnn",
++    path_to_cmake_lists = "external/mnn_repo",
++    binaries = [
++        "MNNConvert",
++        "MNNV2Basic.out",
++        "timeProfile.out"
++    ],
++    hdrs = [
++        "MNN/AutoTime.hpp",
++        "MNN/ErrorCode.hpp",
++        "MNN/ImageProcess.hpp",
++        "MNN/Interpreter.hpp",
++        "MNN/Matrix.h",
++        "MNN/MNNDefine.h",
++        "MNN/MNNForwardType.h",
++        "MNN/MNNSharedContext.h",
++        "MNN/Rect.h",
++        "MNN/Tensor.hpp",
++        "MNN/expr/Executor.hpp",
++        "MNN/expr/ExecutorScope.hpp",
++        "MNN/expr/ExprCreator.hpp",
++        "MNN/expr/Expr.hpp",
++        "MNN/expr/MathOp.hpp",
++        "MNN/expr/Module.hpp",
++        "MNN/expr/NeuralNetWorkOp.hpp",
++        "MNN/expr/Optimizer.hpp",
++        "MNN/expr/Scope.hpp",
++    ],
++    cmake_args = [
++        "-DMNN_BUILD_CONVERTER=true",
++        "-DMNN_BUILD_SHARED_LIBS=OFF",
++        "-DMNN_PORTABLE_BUILD=ON",
++    ] + if_darwin(["-DMNN_METAL=ON", "-DMNN_COREML=ON", "-DMNN_USE_SYSTEM_LIB=ON"])
++      + if_ios_arm64(["-DMNN_METAL=ON", "-DMNN_COREML=ON", "-DMNN_USE_SYSTEM_LIB=ON"])
++      + if_ios_armv7(["-DMNN_METAL=ON", "-DMNN_COREML=ON", "-DMNN_USE_SYSTEM_LIB=ON"])
++      + if_linux(["-DMNN_OPENCL=ON", "-DMNN_USE_SYSTEM_LIB=ON"])
++      + if_android_arm64(["-DMNN_VULKAN=ON", "-DMNN_OPENGL=ON", "-DMNN_OPENCL=ON"])
++      + if_android_arm(["-DMNN_VULKAN=ON", "-DMNN_OPENGL=ON", "-DMNN_OPENCL=ON"])
++      + if_windows(["-DMNN_OPENGL=ON", "-DMNN_USE_SYSTEM_LIB=ON"]),
++)
++
++cc_library (
++    name = "mnn_public_headers",
++    hdrs = glob(["MNN/*.h",]) +
++           glob (["MNN/*.hpp"]) +
++           glob(["MNN/expr/*hpp"]) +
++           glob(["MNN/expr/*.h"]),
++    includes = ["include"],
++    deps = [
++        ":mnn"
++    ],
++    visibility = ["//visibility:public"],
++)
+diff --git a/cmake_rules.bzl b/cmake_rules.bzl
+new file mode 100644
+index 00000000..6c95a779
+--- /dev/null
++++ b/cmake_rules.bzl
+@@ -0,0 +1,110 @@
++"""Utilities for building with CMake in Bazel."""
++
++def _cmake_build_impl(ctx):
++    # Convert the list of arguments into a single string
++    cmake_args = " ".join(ctx.attr.cmake_args)
++
++    # Prepare commands to run CMake configure and build
++    cmake_configure_cmd = "cmake {} ..".format(cmake_args)
++    cmake_build_cmd = "cmake --build . -j32"
++    install_folder = ctx.attr.path_to_bazel_byproducts
++    # Find the C++ toolchain
++    cc_toolchain = ctx.attr._cc_toolchain[cc_common.CcToolchainInfo]
++    if not cc_toolchain:
++        fail("Unable to find a C++ toolchain.")
++
++    # Get the feature configuration
++    feature_configuration = cc_common.configure_features(
++        ctx = ctx,
++        cc_toolchain = cc_toolchain,
++        requested_features = ctx.features,
++        unsupported_features = [],
++    )
++
++    # Create a shell command to run the CMake commands
++    cmd = """
++    root=$(pwd)/{}
++    cd {}
++    install_folder={}
++    mkdir -p build && cd build
++    mkdir -p $root/$install_folder/include/
++    {configure}
++    {build}
++    echo "Copying libraries and binaries to $root/$install_folder"
++    cp -r lib/* $root/$install_folder/
++    cp -r bin/* $root/$install_folder/
++    cp -r include/* $root/$install_folder/include/
++    """.format(
++        ctx.genfiles_dir.path,
++        ctx.attr.path_to_cmake_lists,
++        install_folder,
++        configure=cmake_configure_cmd,
++        build=cmake_build_cmd)
++
++    libraries_byproducts = [
++        ctx.actions.declare_file(lib)
++            for lib in ctx.attr.libraries
++    ]
++    header_files = [
++        ctx.actions.declare_file("include/{}".format(header))
++            for header in ctx.attr.hdrs
++    ]
++    # Create an action to execute the shell command
++    ctx.actions.run_shell(
++        use_default_shell_env = True,
++        inputs = ctx.files.srcs,
++        outputs = libraries_byproducts + ctx.outputs.binaries + header_files,
++        command = cmd,
++    )
++
++    linker_inputs = [
++        cc_common.create_linker_input(
++            owner=ctx.label,
++            libraries=depset([cc_common.create_library_to_link(
++                actions=ctx.actions,
++                feature_configuration=feature_configuration,
++                cc_toolchain=cc_toolchain,
++                static_library=lib_file
++            ) for lib_file in libraries_byproducts])
++        )
++    ]
++
++    # Create the CcInfo provider.
++    cc_info = CcInfo(
++        compilation_context = cc_common.create_compilation_context(
++            headers = depset(header_files),
++            includes = depset([ctx.genfiles_dir.path + "/include"])
++        ),
++        linking_context = cc_common.create_linking_context(linker_inputs=depset(linker_inputs))
++    )
++
++    return [
++        DefaultInfo(
++            files=depset(libraries_byproducts + ctx.outputs.binaries + header_files),
++        ),
++        cc_info,
++        OutputGroupInfo(
++            static_libraries=libraries_byproducts,
++            binaries=ctx.outputs.binaries,
++            headers= header_files,
++        )
++    ]
++
++cmake_build = rule(
++    implementation = _cmake_build_impl,
++    attrs = {
++        "_cc_toolchain": attr.label(
++            default = Label("@bazel_tools//tools/cpp:current_cc_toolchain"),
++            providers = [cc_common.CcToolchainInfo],
++            doc = "The C++ toolchain for the target platform."
++        ),
++        "srcs": attr.label_list(allow_files=True),
++        "path_to_cmake_lists": attr.string(),
++        "path_to_bazel_byproducts": attr.string(),
++        "libraries": attr.string_list(),
++        "binaries": attr.output_list(),
++        "hdrs": attr.string_list(),
++        "cmake_args": attr.string_list(),
++    },
++    fragments = ["cpp"],  # This line declares the CppConfiguration fragment
++)
+diff --git a/platform.bzl b/platform.bzl
+new file mode 100644
+index 00000000..f2076e4b
+--- /dev/null
++++ b/platform.bzl
+@@ -0,0 +1,85 @@
++"""Platform definitions for select rules in bazel"""
++
++def if_host(a, default_value = []):
++    return select({
++        "//:host": a,
++        "//conditions:default": default_value,
++    })
++
++def if_linux_base(a, default_value = []):
++    return select({
++        "//:linux_base": a,
++        "//conditions:default": default_value,
++    })
++
++def if_android(a, default_value = []):
++    return select({
++        "//:android": a,
++        "//conditions:default": default_value,
++    })
++
++def if_linux(a, default_value = []):
++    return select({
++        "//:linux": a,
++        "//conditions:default": default_value,
++    })
++
++def if_darwin(a, default_value = []):
++    return select({
++        "//:macos": a,
++        "//conditions:default": default_value,
++    })
++
++def if_darwin_arm64(a, default_value = []):
++    return select({
++        "//:macos_arm64": a,
++        "//conditions:default": default_value,
++    })
++
++def if_windows(a, default_value = []):
++    return select({
++        "//:windows": a,
++        "//conditions:default": default_value,
++    })
++
++def if_ios_armv7(a):
++    return select({
++        "//:ios_armv7": a,
++        "//conditions:default": [],
++    })
++
++def if_ios_arm64(a):
++    return select({
++        "//:ios_arm64": a,
++        "//conditions:default": [],
++    })
++
++def if_ios_arm64e(a):
++    return select({
++        "//:ios_arm64e": a,
++        "//conditions:default": [],
++    })
++
++def if_android_arm(a):
++    return select({
++        "//:android_arm": a,
++        "//conditions:default": [],
++    })
++
++def if_android_arm64(a):
++    return select({
++        "//:android_arm64": a,
++        "//conditions:default": [],
++    })
++
++def if_arm_linux_aarch64(a):
++    return select({
++        ":arm_linux_aarch64": a,
++        "//conditions:default": [],
++    })
++
++def if_arm_linux_armhf(a):
++    return select({
++        ":arm_linux_armhf": a,
++        "//conditions:default": [],
++    })
+-- 
+2.34.1
+

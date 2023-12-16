@@ -1,0 +1,11 @@
+{
+    "homepage": "https://github.com/alibaba/MNN",
+    "maintainers": [],
+    "repository": [
+        "github:alibaba/MNN"
+    ],
+    "versions": [
+        "2.8.0"
+    ],
+    "yanked_versions": {}
+}

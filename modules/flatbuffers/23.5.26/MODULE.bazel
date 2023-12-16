@@ -1,0 +1,10 @@
+"""Module flatbuffers tbzlmod dependency."""
+
+module(
+    name = "flatbuffers",
+    version = "23.5.26",
+    compatibility_level = 1,
+)
+
+# to make sha256 work do this:
+# openssl dgst -sha256 -binary <file> | openssl base64 -A | sed 's/^/sha256-/'

@@ -1,0 +1,270 @@
+From aa8e4c5ddcc4b11229ff97ed52d27fde0d200dd8 Mon Sep 17 00:00:00 2001
+From: Cesare Mercurio <cesare.mercurio@gmail.com>
+Date: Sun, 20 Aug 2023 11:18:25 -0700
+Subject: [PATCH] VVI-121 : VV PATCH for MNN
+
+Summary:
+Includes HalideRuntime circular deps
+
+Test Plan:
+---
+ CMakeLists.txt                            | 51 ++++++++++++++++++++++-
+ include/{MNN => }/HalideRuntime.h         |  0
+ include/MNN/Tensor.hpp                    |  2 +-
+ include/MNN/expr/Expr.hpp                 |  2 +-
+ project/ios/MNN.xcodeproj/project.pbxproj |  2 +-
+ project/ios/demo/ViewController.mm        |  2 +-
+ pymnn/pip_package/setup.py                |  2 -
+ pymnn/src/util.h                          |  2 +-
+ source/backend/arm82/Arm82Backend.hpp     |  2 +-
+ test/CMakeLists.txt                       |  2 +-
+ tools/converter/CMakeLists.txt            |  3 +-
+ tools/converter/source/common/Common.hpp  |  2 +-
+ 12 files changed, 58 insertions(+), 14 deletions(-)
+ rename include/{MNN => }/HalideRuntime.h (100%)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 11a4d3a6..5fb0fdc2 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -242,6 +242,10 @@ message(STATUS "\tHidden: ${MNN_HIDDEN}")
+ message(STATUS "\tBuild Path: ${CMAKE_CURRENT_BINARY_DIR}")
+ message(STATUS "\tCUDA PROFILE: ${MNN_CUDA_PROFILE}")
+ 
++set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
++set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
++set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
++
+ if(CMAKE_SYSTEM_NAME MATCHES "^Android" OR CMAKE_SYSTEM_NAME MATCHES "^Linux")
+     add_definitions(-fPIC)
+ endif()
+@@ -396,7 +400,7 @@ SET(MNN_PUB_HDRS "")
+ SET(MNN_EXPR_PUB_HDRS "")
+ list(APPEND MNN_PUB_HDRS "${CMAKE_CURRENT_SOURCE_DIR}/include/MNN/MNNDefine.h")
+ list(APPEND MNN_PUB_HDRS "${CMAKE_CURRENT_SOURCE_DIR}/include/MNN/Interpreter.hpp")
+-list(APPEND MNN_PUB_HDRS "${CMAKE_CURRENT_SOURCE_DIR}/include/MNN/HalideRuntime.h")
++list(APPEND MNN_PUB_HDRS "${CMAKE_CURRENT_SOURCE_DIR}/include/HalideRuntime.h")
+ list(APPEND MNN_PUB_HDRS "${CMAKE_CURRENT_SOURCE_DIR}/include/MNN/Tensor.hpp")
+ list(APPEND MNN_PUB_HDRS "${CMAKE_CURRENT_SOURCE_DIR}/include/MNN/ErrorCode.hpp")
+ list(APPEND MNN_PUB_HDRS "${CMAKE_CURRENT_SOURCE_DIR}/include/MNN/ImageProcess.hpp")
+@@ -729,7 +733,7 @@ else()
+ endif()
+ if (NOT MNN_BUILD_SHARED_LIBS)
+     if(APPLE)
+-        set(MNN_DEPS -Wl,-all_load ${MNN_DEPS} -Wl,-noall_load)
++        set(MNN_DEPS -Wl,-all_load ${MNN_DEPS})
+     elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+         # Static-link will not replace thread-related weak symbol in glibc with strong symbol
+         # in pthread library, so we need use --whole-archive to pthread
+@@ -802,11 +806,13 @@ ELSEIF(NOT APPLE)
+   install(TARGETS MNN
+       LIBRARY DESTINATION lib
+       ARCHIVE DESTINATION lib
++      PUBLIC_HEADER DESTINATION include
+   )
+ ELSE()
+   install(TARGETS MNN
+       LIBRARY DESTINATION lib
+       ARCHIVE DESTINATION lib
++      PUBLIC_HEADER DESTINATION include
+       FRAMEWORK DESTINATION /Library/Frameworks/
+   )
+   if (NOT MNN_AAPL_FMWK)
+@@ -823,6 +829,47 @@ ELSE()
+     SET_SOURCE_FILES_PROPERTIES(${CMAKE_CURRENT_BINARY_DIR}/mnn.metallib PROPERTIES MACOSX_PACKAGE_LOCATION Resources/)
+   ENDIF()
+ ENDIF()
++
++set(MNN_INCLUDE_OUTPUT "include/MNN")
++set(MNN_INCLUDE_HALIDE_OUTPUT "include")
++add_custom_command(
++  TARGET MNN
++  POST_BUILD
++  COMMAND ${CMAKE_COMMAND}
++  -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/${MNN_INCLUDE_OUTPUT}/"
++)
++add_custom_command(
++  TARGET MNN
++  POST_BUILD
++  COMMAND ${CMAKE_COMMAND}
++  -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/${MNN_INCLUDE_OUTPUT}/expr/"
++)
++FOREACH(header ${MNN_PUB_HDRS})
++  if(${header} MATCHES ".*HalideRuntime.h")
++    add_custom_command(
++        TARGET MNN
++        POST_BUILD
++        COMMAND ${CMAKE_COMMAND}
++        ARGS -E copy ${header} "${CMAKE_CURRENT_BINARY_DIR}/${MNN_INCLUDE_HALIDE_OUTPUT}/"
++      )
++  else()
++    add_custom_command(
++        TARGET MNN
++        POST_BUILD
++        COMMAND ${CMAKE_COMMAND}
++        ARGS -E copy ${header} "${CMAKE_CURRENT_BINARY_DIR}/${MNN_INCLUDE_OUTPUT}/"
++    )
++  endif()
++ENDFOREACH()
++FOREACH(header ${MNN_EXPR_PUB_HDRS})
++  add_custom_command(
++    TARGET MNN
++    POST_BUILD
++    COMMAND ${CMAKE_COMMAND}
++    ARGS -E copy ${header} "${CMAKE_CURRENT_BINARY_DIR}/${MNN_INCLUDE_OUTPUT}/expr/"
++  )
++ENDFOREACH()
++
+ if (MNN_JNI)
+     add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/source/jni/)
+ endif()
+diff --git a/include/MNN/HalideRuntime.h b/include/HalideRuntime.h
+similarity index 100%
+rename from include/MNN/HalideRuntime.h
+rename to include/HalideRuntime.h
+diff --git a/include/MNN/Tensor.hpp b/include/MNN/Tensor.hpp
+index e4431097..936960f0 100644
+--- a/include/MNN/Tensor.hpp
++++ b/include/MNN/Tensor.hpp
+@@ -10,7 +10,7 @@
+ #define MNN_Tensor_hpp
+ 
+ #include <vector>
+-#include <MNN/HalideRuntime.h>
++#include <HalideRuntime.h>
+ #include <MNN/MNNDefine.h>
+ 
+ namespace MNN {
+diff --git a/include/MNN/expr/Expr.hpp b/include/MNN/expr/Expr.hpp
+index 973d46f8..668c6beb 100644
+--- a/include/MNN/expr/Expr.hpp
++++ b/include/MNN/expr/Expr.hpp
+@@ -14,7 +14,7 @@
+ #include <vector>
+ #include <map>
+ #include <memory>
+-#include <MNN/HalideRuntime.h>
++#include <HalideRuntime.h>
+ #include <MNN/MNNDefine.h>
+ 
+ namespace MNN {
+diff --git a/project/ios/MNN.xcodeproj/project.pbxproj b/project/ios/MNN.xcodeproj/project.pbxproj
+index 872fe50e..ae531328 100644
+--- a/project/ios/MNN.xcodeproj/project.pbxproj
++++ b/project/ios/MNN.xcodeproj/project.pbxproj
+@@ -837,7 +837,7 @@
+ 		19D0FE6E28534C4500B74B1A /* MetalSoftmax.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MetalSoftmax.hpp; sourceTree = "<group>"; };
+ 		19D0FE73285C66F200B74B1A /* MetalLayerNorm.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MetalLayerNorm.hpp; sourceTree = "<group>"; };
+ 		19D0FE74285C66F200B74B1A /* MetalLayerNorm.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalLayerNorm.mm; sourceTree = "<group>"; };
+-		1F501F722397BA5A004E8721 /* HalideRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HalideRuntime.h; path = MNN/HalideRuntime.h; sourceTree = "<group>"; };
++		1F501F722397BA5A004E8721 /* HalideRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HalideRuntime.h; path = HalideRuntime.h; sourceTree = "<group>"; };
+ 		1F501F732397BA5A004E8721 /* MNNDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MNNDefine.h; path = MNN/MNNDefine.h; sourceTree = "<group>"; };
+ 		1F501F742397BA5A004E8721 /* AutoTime.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AutoTime.hpp; path = MNN/AutoTime.hpp; sourceTree = "<group>"; };
+ 		1F501F752397BA5A004E8721 /* Interpreter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Interpreter.hpp; path = MNN/Interpreter.hpp; sourceTree = "<group>"; };
+diff --git a/project/ios/demo/ViewController.mm b/project/ios/demo/ViewController.mm
+index e8dc32b1..d0aff717 100644
+--- a/project/ios/demo/ViewController.mm
++++ b/project/ios/demo/ViewController.mm
+@@ -10,7 +10,7 @@
+ #import <Metal/Metal.h>
+ 
+ #import <AVFoundation/AVFoundation.h>
+-#import <MNN/HalideRuntime.h>
++#import <HalideRuntime.h>
+ #import <MNN/MNNDefine.h>
+ #import <MNN/ErrorCode.hpp>
+ #import <MNN/ImageProcess.hpp>
+diff --git a/pymnn/pip_package/setup.py b/pymnn/pip_package/setup.py
+index 67e357fe..db5edbb8 100644
+--- a/pymnn/pip_package/setup.py
++++ b/pymnn/pip_package/setup.py
+@@ -309,7 +309,6 @@ def configure_extension_build():
+         engine_link_args += ['-stdlib=libc++']
+         engine_link_args += ['-Wl,-all_load']
+         engine_link_args += engine_depend
+-        engine_link_args += ['-Wl,-noall_load']
+     if IS_LINUX:
+         engine_link_args += ['-Wl,--whole-archive']
+         engine_link_args += engine_depend
+@@ -320,7 +319,6 @@ def configure_extension_build():
+     if IS_DARWIN:
+         tools_link_args += ['-Wl,-all_load']
+         tools_link_args += tools_depend
+-        tools_link_args += ['-Wl,-noall_load']
+     if IS_LINUX:
+         tools_link_args += ['-Wl,--whole-archive']
+         tools_link_args += tools_depend
+diff --git a/pymnn/src/util.h b/pymnn/src/util.h
+index 0630292e..3d199f63 100644
+--- a/pymnn/src/util.h
++++ b/pymnn/src/util.h
+@@ -5,7 +5,7 @@
+ #include <map>
+ #include <unordered_map>
+ #include <algorithm>
+-#include <MNN/HalideRuntime.h>
++#include <HalideRuntime.h>
+ #include <MNN/MNNForwardType.h>
+ #include <MNN/Interpreter.hpp>
+ #if defined(_MSC_VER) && PY_MAJOR_VERSION >= 3
+diff --git a/source/backend/arm82/Arm82Backend.hpp b/source/backend/arm82/Arm82Backend.hpp
+index 11511615..8845fc31 100644
+--- a/source/backend/arm82/Arm82Backend.hpp
++++ b/source/backend/arm82/Arm82Backend.hpp
+@@ -13,7 +13,7 @@
+ #include "backend/cpu/CPUBackend.hpp"
+ #include "core/Macro.h"
+ #include "core/TensorUtils.hpp"
+-#include <MNN/HalideRuntime.h>
++#include <HalideRuntime.h>
+ 
+ // armv82's data type default is fp16, so set
+ // armv82's dataformat: NC8HW8
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index 896089e4..303329a3 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -26,7 +26,7 @@ if (MNN_SUPPORT_BF16)
+ endif()
+ if (NOT MNN_BUILD_SHARED_LIBS)
+   if(APPLE)
+-    set(TEST_DEPS -Wl,-all_load ${TEST_DEPS} -Wl,-noall_load)
++    set(TEST_DEPS -Wl,-all_load ${TEST_DEPS})
+   elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+     set(TEST_DEPS -Wl,--whole-archive ${TEST_DEPS} -Wl,--no-whole-archive)
+   elseif(MSVC)
+diff --git a/tools/converter/CMakeLists.txt b/tools/converter/CMakeLists.txt
+index a1d506dc..e1b333e5 100644
+--- a/tools/converter/CMakeLists.txt
++++ b/tools/converter/CMakeLists.txt
+@@ -1,5 +1,4 @@
+ IF(MNN_BUILD_CONVERTER)
+-  SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/../../)
+   option(MNN_BUILD_TORCH "Build Converter support TorchScript." OFF)
+   IF(MNN_BUILD_PROTOBUFFER)
+       SET(Protobuf_LIBRARIES libprotobuf)
+@@ -51,7 +50,7 @@ IF(MNN_BUILD_CONVERTER)
+         target_link_libraries(MNNConvertDeps PUBLIC ${TORCH_LIBRARIES})
+     endif()
+     if(APPLE)
+-        target_link_libraries(MNNConvert -Wl,-all_load MNNConvertDeps ${MNN_DEPS} -Wl,-noall_load)
++        target_link_libraries(MNNConvert -Wl,-all_load MNNConvertDeps ${MNN_DEPS})
+     elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+         # See also /path/to/MNN/CMakeLists.txt:481 when you are confused with -lpthread here.
+         target_link_libraries(MNNConvert -Wl,--whole-archive MNNConvertDeps ${MNN_DEPS} -lpthread -Wl,--no-whole-archive)
+diff --git a/tools/converter/source/common/Common.hpp b/tools/converter/source/common/Common.hpp
+index aca58037..0b676b88 100644
+--- a/tools/converter/source/common/Common.hpp
++++ b/tools/converter/source/common/Common.hpp
+@@ -9,7 +9,7 @@
+ #ifndef MNN_CONVERTER_COMMON_COMMON_HPP_
+ #define MNN_CONVERTER_COMMON_COMMON_HPP_
+ 
+-#include "MNN/HalideRuntime.h"
++#include "HalideRuntime.h"
+ #include "MNN/expr/Expr.hpp"
+ 
+ #include "MNN_generated.h"
+-- 
+2.34.1
+
