@@ -1,0 +1,16 @@
+platforms:
+  centos7:
+    build_targets:
+    - '@node-api-headers//:node-api-headers'
+  debian10:
+    build_targets:
+    - '@node-api-headers//:node-api-headers'
+  macos:
+    build_targets:
+    - '@node-api-headers//:node-api-headers'
+  ubuntu2004:
+    build_targets:
+    - '@node-api-headers//:node-api-headers'
+  windows:
+    build_targets:
+    - '@node-api-headers//:node-api-headers'

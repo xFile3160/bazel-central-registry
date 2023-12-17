@@ -1,0 +1,11 @@
+{
+    "homepage": "https://github.com/nodejs/node-api-headers",
+    "maintainers": [],
+    "repository": [
+        "github:nodejs/node-api-headers"
+    ],
+    "versions": [
+        "1.1.0"
+    ],
+    "yanked_versions": {}
+}

@@ -1,0 +1,9 @@
+"""Module node-api-headers"""
+
+module(
+    name = "node-api-headers",
+    version = "1.1.0",
+    compatibility_level = 1,
+)
+
+bazel_dep(name = "rules_cc", version = "0.0.9")
