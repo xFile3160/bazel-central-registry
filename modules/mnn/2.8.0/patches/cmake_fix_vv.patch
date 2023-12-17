@@ -1,7 +1,7 @@
-From aa8e4c5ddcc4b11229ff97ed52d27fde0d200dd8 Mon Sep 17 00:00:00 2001
+From ec24f6b865ba5a71ea93f6a4ccbc38c6ec2b1c90 Mon Sep 17 00:00:00 2001
 From: Cesare Mercurio <cesare.mercurio@gmail.com>
 Date: Sun, 20 Aug 2023 11:18:25 -0700
-Subject: [PATCH] VVI-121 : VV PATCH for MNN
+Subject: [PATCH] VVI-122 : VV PATCH for MNN
 
 Summary:
 Includes HalideRuntime circular deps
@@ -14,17 +14,17 @@ Test Plan:
  include/MNN/expr/Expr.hpp                 |  2 +-
  project/ios/MNN.xcodeproj/project.pbxproj |  2 +-
  project/ios/demo/ViewController.mm        |  2 +-
- pymnn/pip_package/setup.py                |  2 -
+ pymnn/pip_package/setup.py                |  6 +--
  pymnn/src/util.h                          |  2 +-
  source/backend/arm82/Arm82Backend.hpp     |  2 +-
  test/CMakeLists.txt                       |  2 +-
  tools/converter/CMakeLists.txt            |  3 +-
  tools/converter/source/common/Common.hpp  |  2 +-
- 12 files changed, 58 insertions(+), 14 deletions(-)
+ 12 files changed, 60 insertions(+), 16 deletions(-)
  rename include/{MNN => }/HalideRuntime.h (100%)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 11a4d3a6..5fb0fdc2 100644
+index 11a4d3a6..b375c529 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -242,6 +242,10 @@ message(STATUS "\tHidden: ${MNN_HIDDEN}")
@@ -52,7 +52,7 @@ index 11a4d3a6..5fb0fdc2 100644
  if (NOT MNN_BUILD_SHARED_LIBS)
      if(APPLE)
 -        set(MNN_DEPS -Wl,-all_load ${MNN_DEPS} -Wl,-noall_load)
-+        set(MNN_DEPS -Wl,-all_load ${MNN_DEPS})
++        set(MNN_DEPS -Wl,-force_load ${MNN_DEPS})
      elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
          # Static-link will not replace thread-related weak symbol in glibc with strong symbol
          # in pthread library, so we need use --whole-archive to pthread
@@ -175,20 +175,26 @@ index e8dc32b1..d0aff717 100644
  #import <MNN/ErrorCode.hpp>
  #import <MNN/ImageProcess.hpp>
 diff --git a/pymnn/pip_package/setup.py b/pymnn/pip_package/setup.py
-index 67e357fe..db5edbb8 100644
+index 67e357fe..8c1d74e8 100644
 --- a/pymnn/pip_package/setup.py
 +++ b/pymnn/pip_package/setup.py
-@@ -309,7 +309,6 @@ def configure_extension_build():
+@@ -307,9 +307,8 @@ def configure_extension_build():
+ 
+     if IS_DARWIN:
          engine_link_args += ['-stdlib=libc++']
-         engine_link_args += ['-Wl,-all_load']
+-        engine_link_args += ['-Wl,-all_load']
++        engine_link_args += ['-Wl,-foce_load']
          engine_link_args += engine_depend
 -        engine_link_args += ['-Wl,-noall_load']
      if IS_LINUX:
          engine_link_args += ['-Wl,--whole-archive']
          engine_link_args += engine_depend
-@@ -320,7 +319,6 @@ def configure_extension_build():
+@@ -318,9 +317,8 @@ def configure_extension_build():
+     if IS_WINDOWS:
+         engine_link_args += ['/WHOLEARCHIVE:MNN.lib']
      if IS_DARWIN:
-         tools_link_args += ['-Wl,-all_load']
+-        tools_link_args += ['-Wl,-all_load']
++        tools_link_args += ['-Wl,-foce_load']
          tools_link_args += tools_depend
 -        tools_link_args += ['-Wl,-noall_load']
      if IS_LINUX:
@@ -221,7 +227,7 @@ index 11511615..8845fc31 100644
  // armv82's data type default is fp16, so set
  // armv82's dataformat: NC8HW8
 diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
-index 896089e4..303329a3 100644
+index 896089e4..367ae5e2 100644
 --- a/test/CMakeLists.txt
 +++ b/test/CMakeLists.txt
 @@ -26,7 +26,7 @@ if (MNN_SUPPORT_BF16)
@@ -229,12 +235,12 @@ index 896089e4..303329a3 100644
  if (NOT MNN_BUILD_SHARED_LIBS)
    if(APPLE)
 -    set(TEST_DEPS -Wl,-all_load ${TEST_DEPS} -Wl,-noall_load)
-+    set(TEST_DEPS -Wl,-all_load ${TEST_DEPS})
++    set(TEST_DEPS -Wl,-force_load ${TEST_DEPS})
    elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
      set(TEST_DEPS -Wl,--whole-archive ${TEST_DEPS} -Wl,--no-whole-archive)
    elseif(MSVC)
 diff --git a/tools/converter/CMakeLists.txt b/tools/converter/CMakeLists.txt
-index a1d506dc..e1b333e5 100644
+index a1d506dc..5f20cf2e 100644
 --- a/tools/converter/CMakeLists.txt
 +++ b/tools/converter/CMakeLists.txt
 @@ -1,5 +1,4 @@
@@ -248,7 +254,7 @@ index a1d506dc..e1b333e5 100644
      endif()
      if(APPLE)
 -        target_link_libraries(MNNConvert -Wl,-all_load MNNConvertDeps ${MNN_DEPS} -Wl,-noall_load)
-+        target_link_libraries(MNNConvert -Wl,-all_load MNNConvertDeps ${MNN_DEPS})
++        target_link_libraries(MNNConvert -Wl,-force_load MNNConvertDeps ${MNN_DEPS})
      elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
          # See also /path/to/MNN/CMakeLists.txt:481 when you are confused with -lpthread here.
          target_link_libraries(MNNConvert -Wl,--whole-archive MNNConvertDeps ${MNN_DEPS} -lpthread -Wl,--no-whole-archive)
@@ -266,5 +272,5 @@ index aca58037..0b676b88 100644
  
  #include "MNN_generated.h"
 -- 
-2.34.1
+2.43.0
 
