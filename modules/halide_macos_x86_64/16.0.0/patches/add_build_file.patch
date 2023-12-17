@@ -1,33 +1,20 @@
-From b73e26c8a78239acd9d897ad002b4dcffd4d1274 Mon Sep 17 00:00:00 2001
+From 1d5dbae313c3b8e7c1be22706e7529eaecb45bed Mon Sep 17 00:00:00 2001
 From: Cesare Mercurio <cesare.mercurio@gmail.com>
-Date: Fri, 15 Dec 2023 23:37:28 -0800
-Subject: [PATCH] VVI-Halide-patch: add BUILD file
+Date: Sat, 16 Dec 2023 18:39:31 -0800
+Subject: [PATCH] VVI-Halide-patch : add BUILD file
 
 Summary:
-Adds build file for bazel environment
+Adds build file for bazel enviornment with bzlmod
 
-Test plan:
+Test Plan:
 integration in vvplatform
 ---
- .gitignore |  1 -
  BUILD      | 65 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
  halide.bzl | 26 ++++++++++++++++++++++
- 3 files changed, 91 insertions(+), 1 deletion(-)
+ 2 files changed, 91 insertions(+)
  create mode 100644 BUILD
  create mode 100644 halide.bzl
 
-diff --git a/.gitignore b/.gitignore
-index 4a19876f8..9fb78cdc8 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -247,7 +247,6 @@ TAGS
- !packaging/ubuntu/changelog
- !packaging/ubuntu/copyright
- !packaging/ubuntu/triggers
--
- # Allow XCode PCHs in the HelloiOS app
- !apps/HelloiOS/**/*-Prefix.pch
- 
 diff --git a/BUILD b/BUILD
 new file mode 100644
 index 000000000..117d0a48d
