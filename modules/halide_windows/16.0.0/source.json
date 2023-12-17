@@ -3,7 +3,7 @@
     "patch_strip": 1,
     "patches": {
         "add_build_file.patch": "sha256-2qYi4d+JDBsBFC7dTKUGoWBdRJad9uyTchn1lNkhrps=",
-        "add_module_dot_bazel.patch": "sha256-NfSKdZ2rniGhTbWLs6rMfsAZkTZXNpzGtkE24l+iJGs="
+        "add_module_dot_bazel.patch": "sha256-dlyg5evIQKT4lq8Az7TwhWFfl3Tf5Zcdn3RFHecM/No="
     },
     "strip_prefix": "Halide-16.0.0-x86-64-windows",
     "url": "https://github.com/halide/Halide/releases/download/v16.0.0/Halide-16.0.0-x86-64-windows-1e963ff817ef0968cc25d811a25a7350c8953ee6.zip"
