@@ -839,7 +839,7 @@ index 000000000..532c45d62
 +            requested_outputs = ["object"],
 +            tags = ["manual"],
 +            target_features = hl_instance,
-+            visibility = ["@halide//:__subpackages__"],
++            visibility = ["@halide_linux_x86_64//:__subpackages__"],
 +        )
 +        for cfg in cfgs:
 +            condition_deps[cfg] = [":%s" % gengen_name]
@@ -947,8 +947,8 @@ index 000000000..532c45d62
 +        compatible_with = compatible_with,
 +        srcs = srcs,
 +        deps = [
-+            "@halide//:gengen",
-+            "@halide//:language",
++            "@halide_linux_x86_64//:gengen",
++            "@halide_linux_x86_64//:language",
 +        ] + deps,
 +        tags = ["manual"] + tags,
 +        testonly = testonly,
@@ -984,7 +984,7 @@ index 000000000..532c45d62
 +    attrs = {
 +        "halide_target_features": attr.string_list(),
 +        "_standard_runtimes": attr.label_list(
-+            default = ["@halide//:%s" % n for n in _standard_library_runtime_names()],
++            default = ["@halide_linux_x86_64//:%s" % n for n in _standard_library_runtime_names()],
 +            providers = [CcInfo],
 +        ),
 +    },
@@ -1099,7 +1099,7 @@ index 000000000..532c45d62
 +            ":%s_h" % name,
 +        ],
 +        deps = deps +
-+               ["@halide//:runtime"] +  # for HalideRuntime.h, etc
++               ["@halide_linux_x86_64//:runtime"] +  # for HalideRuntime.h, etc
 +               ([":%s.halide_library_runtime_deps" % name] if add_halide_runtime_deps else []),  # for the runtime implementation
 +        defines = ["HALIDE_FUNCTION_ATTRS=HALIDE_MUST_USE_RESULT"],
 +        compatible_with = compatible_with,
