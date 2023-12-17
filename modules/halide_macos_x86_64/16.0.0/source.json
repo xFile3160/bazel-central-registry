@@ -2,7 +2,7 @@
     "integrity": "sha256-YYsXl1TjN+zWngXz5UC+H2XujaSRw5RFi3efT9nz0U0=",
     "patch_strip": 1,
     "patches": {
-        "add_build_file.patch": "sha256-2qYi4d+JDBsBFC7dTKUGoWBdRJad9uyTchn1lNkhrps=",
+        "add_build_file.patch": "sha256-dEyho8zsbH9mnvGg2HV3uhNBLz9Fhw7PnvCB6dd9qF8=",
         "add_module_dot_bazel.patch": "sha256-9OAAh6jj3F8RyU751DGY2vRaEvpzSN33xCoZ1LFx+lM="
     },
     "strip_prefix": "Halide-16.0.0-x86-64-osx",
