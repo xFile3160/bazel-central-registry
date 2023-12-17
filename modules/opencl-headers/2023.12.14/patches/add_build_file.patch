@@ -1,0 +1,39 @@
+From 4a290add9f7ddae78f27f7b5ee073f8d731fc841 Mon Sep 17 00:00:00 2001
+From: Cesare Mercurio <cesare.mercurio@gmail.com>
+Date: Sat, 16 Dec 2023 23:21:41 -0800
+Subject: [PATCH 2/2] VVI-OpenCL-Headers : Add BUILD stage to bzlmod
+
+Summary:
+Adds build file for bazel compilation
+
+Test Plan:
+integration with vvplatform
+---
+ BUILD | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+ create mode 100644 BUILD
+
+diff --git a/BUILD b/BUILD
+new file mode 100644
+index 0000000..3616603
+--- /dev/null
++++ b/BUILD
+@@ -0,0 +1,14 @@
++load("@rules_cc//cc:defs.bzl", "cc_library")
++
++licenses(["notice"])
++
++exports_files(["LICENSE.txt"])
++
++cc_library(
++    name = "opencl_headers",
++    hdrs = glob([
++        "CL/*.h",
++    ]),
++    includes = ["."],
++    visibility = ["//visibility:public"],
++)
+\ No newline at end of file
+-- 
+2.34.1
+

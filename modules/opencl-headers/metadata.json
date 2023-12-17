@@ -1,0 +1,11 @@
+{
+    "homepage": "https://github.com/KhronosGroup/OpenCL-Headers",
+    "maintainers": [],
+    "repository": [
+        "github:KhronosGroup/OpenCL-Headers"
+    ],
+    "versions": [
+        "2023.12.14"
+    ],
+    "yanked_versions": {}
+}

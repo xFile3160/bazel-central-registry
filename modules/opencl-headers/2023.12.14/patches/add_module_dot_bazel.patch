@@ -1,0 +1,31 @@
+From 6c50a3e424658229cba779b809e3c69140d8afec Mon Sep 17 00:00:00 2001
+From: Cesare Mercurio <cesare.mercurio@gmail.com>
+Date: Sat, 16 Dec 2023 23:20:57 -0800
+Subject: [PATCH 1/2] VVI-OpenCL-Headers : Add opencl-headers bzlmod module
+
+Summary:
+Adds MODULE.bazel to registry
+
+Test Plan:
+integration with vvplatform
+---
+ MODULE.bazel | 6 ++++++
+ 1 file changed, 6 insertions(+)
+ create mode 100644 MODULE.bazel
+
+diff --git a/MODULE.bazel b/MODULE.bazel
+new file mode 100644
+index 0000000..ee0a497
+--- /dev/null
++++ b/MODULE.bazel
+@@ -0,0 +1,6 @@
++module(
++    name = "opencl-headers",
++    version = "2023.12.14",
++    compatibility_level = 1,
++)
++bazel_dep(name = "rules_cc", version = "0.0.5")
+\ No newline at end of file
+-- 
+2.34.1
+

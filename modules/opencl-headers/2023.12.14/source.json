@@ -1,0 +1,10 @@
+{
+    "integrity": "sha256-QH1eEJpw7Bts0zgM41fCHj02UakcqubQ2OFxnGmheR0=",
+    "patch_strip": 1,
+    "patches": {
+        "add_build_file.patch": "sha256-lgQtIFNu9fRlQPqagRn00E6bVqZqvJ2KhokMi+KsGwQ=",
+        "add_module_dot_bazel.patch": "sha256-m7OEKlVHGGFYZDono0Vl2XykGBec1aya80NVtZfokj8="
+    },
+    "strip_prefix": "OpenCL-Headers-2023.12.14",
+    "url": "https://github.com/KhronosGroup/OpenCL-Headers/archive/refs/tags/v2023.12.14.tar.gz"
+}
