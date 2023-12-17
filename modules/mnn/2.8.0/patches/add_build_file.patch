@@ -1,4 +1,4 @@
-From 32b016975f1f677bca2bae62478ba583254edfe5 Mon Sep 17 00:00:00 2001
+From 2d4ff2ae9e44700bed28dece6ee8226d2a369230 Mon Sep 17 00:00:00 2001
 From: Cesare Mercurio <cesare.mercurio@gmail.com>
 Date: Sat, 16 Dec 2023 10:54:50 -0800
 Subject: [PATCH] VVI-mnn-patch : Add build stages for bazel bzlmod integration
@@ -9,20 +9,20 @@ Adds build files for bzlmod and cmake_rules
 Test Plan:
 integration in vvplatform
 ---
- BUILD           | 250 ++++++++++++++++++++++++++++++++++++++++++++++++
+ BUILD           | 248 ++++++++++++++++++++++++++++++++++++++++++++++++
  cmake_rules.bzl | 114 ++++++++++++++++++++++
- platform.bzl    |  85 ++++++++++++++++
- 3 files changed, 449 insertions(+)
+ platform.bzl    |  85 +++++++++++++++++
+ 3 files changed, 447 insertions(+)
  create mode 100644 BUILD
  create mode 100644 cmake_rules.bzl
  create mode 100644 platform.bzl
 
 diff --git a/BUILD b/BUILD
 new file mode 100644
-index 00000000..5e5ae8db
+index 00000000..36fcad0a
 --- /dev/null
 +++ b/BUILD
-@@ -0,0 +1,250 @@
+@@ -0,0 +1,248 @@
 +load("@rules_cc//cc:defs.bzl", "cc_library")
 +load(":cmake_rules.bzl", "cmake_build")
 +
@@ -216,10 +216,8 @@ index 00000000..5e5ae8db
 +    srcs = [":all_srcs"],
 +    libraries = [
 +        "libMNN.a"
-+    ] + if_darwin(["libMNNCoreML.a"])
-+      + if_ios_arm64(["libMNNCoreML.a"])
++    ] + if_ios_arm64(["libMNNCoreML.a"])
 +      + if_ios_armv7(["libMNNCoreML.a"])
-+      + if_darwin_arm64(["libMNNCoreML.a"]),
 +    path_to_bazel_byproducts = "external/mnn~2.8.0",
 +    path_to_cmake_lists = "external/mnn~2.8.0",
 +    binaries = [
@@ -252,12 +250,12 @@ index 00000000..5e5ae8db
 +        "-DMNN_BUILD_CONVERTER=true",
 +        "-DMNN_BUILD_SHARED_LIBS=OFF",
 +        "-DMNN_PORTABLE_BUILD=ON",
-+    ] + if_darwin(["-DMNN_METAL=ON", "-DMNN_COREML=ON", "-DMNN_USE_SYSTEM_LIB=ON"])
++    ] + if_darwin(["-DMNN_METAL=ON", "-DMNN_USE_SYSTEM_LIB=ON"])
 +      + if_ios_arm64(["-DMNN_METAL=ON", "-DMNN_COREML=ON", "-DMNN_USE_SYSTEM_LIB=ON"])
 +      + if_ios_armv7(["-DMNN_METAL=ON", "-DMNN_COREML=ON", "-DMNN_USE_SYSTEM_LIB=ON"])
 +      + if_linux(["-DMNN_OPENCL=ON", "-DMNN_USE_SYSTEM_LIB=ON"])
-+      + if_android_arm64(["-DMNN_VULKAN=ON", "-DMNN_OPENGL=ON", "-DMNN_OPENCL=ON"])
-+      + if_android_arm(["-DMNN_VULKAN=ON", "-DMNN_OPENGL=ON", "-DMNN_OPENCL=ON"])
++      + if_android_arm64(["-DMNN_VULKAN=ON", "-DMNN_OPENGL=ON", "-DMNN_OPENCL=ON", "-DMNN_NNAPI"])
++      + if_android_arm(["-DMNN_VULKAN=ON", "-DMNN_OPENGL=ON", "-DMNN_OPENCL=ON", "-DMNN_NNAPI"])
 +      + if_windows(["-DMNN_OPENGL=ON", "-DMNN_USE_SYSTEM_LIB=ON"]),
 +)
 +
@@ -485,5 +483,5 @@ index 00000000..f2076e4b
 +        "//conditions:default": [],
 +    })
 -- 
-2.34.1
+2.43.0
 
