@@ -3,7 +3,7 @@
     "patch_strip": 1,
     "patches": {
         "add_build_file.patch": "sha256-vInqZLLRGFNL1xAeBwXPWw1jNLmJNN8rAFCrSHmivCw=",
-        "add_module_dot_bazel.patch": "sha256-mqXLZXPF2iVRz/LBOlcPQD5xxQJINBr2iINbuXglOGg=",
+        "add_module_dot_bazel.patch": "sha256-xNT7guikzBlU34nNOLzwZz3g85l2F2pMf6tCZrN1rTU=",
         "fix_build_defs.patch": "sha256-o3hj2Slhjato+dLBPcGthcwUnzhPbU+r/3JcQDUTH5g="
     },
     "strip_prefix": "flatbuffers-23.5.26",
