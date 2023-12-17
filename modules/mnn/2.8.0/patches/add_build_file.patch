@@ -1,4 +1,4 @@
-From 9a77763b2030e9d1bf5cc57bcc1b81e3c2486c80 Mon Sep 17 00:00:00 2001
+From 976efa5f99134836c14e0c36a37304dee5c90d8c Mon Sep 17 00:00:00 2001
 From: Cesare Mercurio <cesare.mercurio@gmail.com>
 Date: Sat, 16 Dec 2023 10:54:50 -0800
 Subject: [PATCH] VVI-mnn-patch : Add build stages for bazel bzlmod integration
@@ -10,9 +10,9 @@ Test Plan:
 integration in vvplatform
 ---
  BUILD           | 250 ++++++++++++++++++++++++++++++++++++++++++++++++
- cmake_rules.bzl | 113 ++++++++++++++++++++++
+ cmake_rules.bzl | 116 ++++++++++++++++++++++
  platform.bzl    |  85 ++++++++++++++++
- 3 files changed, 448 insertions(+)
+ 3 files changed, 451 insertions(+)
  create mode 100644 BUILD
  create mode 100644 cmake_rules.bzl
  create mode 100644 platform.bzl
@@ -275,23 +275,26 @@ index 00000000..5e5ae8db
 +)
 diff --git a/cmake_rules.bzl b/cmake_rules.bzl
 new file mode 100644
-index 00000000..a46a04f7
+index 00000000..2439357e
 --- /dev/null
 +++ b/cmake_rules.bzl
-@@ -0,0 +1,113 @@
+@@ -0,0 +1,116 @@
 +"""Utilities for building with CMake in Bazel."""
 +
 +def _cmake_build_impl(ctx):
 +    # Convert the list of arguments into a single string
 +    cmake_args = " ".join(ctx.attr.cmake_args)
 +
-+    # Prepare commands to run CMake configure and build
-+    cmake_configure_cmd = "cmake {} ..".format(cmake_args)
-+    cmake_build_cmd = "cmake --build . -j32"
 +    install_folder = ctx.attr.path_to_bazel_byproducts
 +    cmake_folder = ctx.attr.path_to_cmake_lists
 +    print("DEBUG: install folder %s cmake folder %s" %
 +          (install_folder, cmake_folder))
++    # Prepare commands to run CMake configure and build
++    go_back_folder = "../"
++    cmake_configure_cmd = "cmake {} {folder}".format(cmake_args, folder = go_back_folder)
++    cmake_build_cmd = "cmake --build . -j32"
++    print("DEBUG: cmake configure command: %s \n cmake build command: %s" %
++          (cmake_configure_cmd, cmake_build_cmd))
 +    # Find the C++ toolchain
 +    cc_toolchain = ctx.attr._cc_toolchain[cc_common.CcToolchainInfo]
 +    if not cc_toolchain:
