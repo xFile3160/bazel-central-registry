@@ -1,4 +1,4 @@
-From 17f71a4cac95753addcd6084e72c80d84e950959 Mon Sep 17 00:00:00 2001
+From 9a77763b2030e9d1bf5cc57bcc1b81e3c2486c80 Mon Sep 17 00:00:00 2001
 From: Cesare Mercurio <cesare.mercurio@gmail.com>
 Date: Sat, 16 Dec 2023 10:54:50 -0800
 Subject: [PATCH] VVI-mnn-patch : Add build stages for bazel bzlmod integration
@@ -10,16 +10,16 @@ Test Plan:
 integration in vvplatform
 ---
  BUILD           | 250 ++++++++++++++++++++++++++++++++++++++++++++++++
- cmake_rules.bzl | 110 +++++++++++++++++++++
+ cmake_rules.bzl | 113 ++++++++++++++++++++++
  platform.bzl    |  85 ++++++++++++++++
- 3 files changed, 445 insertions(+)
+ 3 files changed, 448 insertions(+)
  create mode 100644 BUILD
  create mode 100644 cmake_rules.bzl
  create mode 100644 platform.bzl
 
 diff --git a/BUILD b/BUILD
 new file mode 100644
-index 00000000..73128201
+index 00000000..5e5ae8db
 --- /dev/null
 +++ b/BUILD
 @@ -0,0 +1,250 @@
@@ -275,10 +275,10 @@ index 00000000..73128201
 +)
 diff --git a/cmake_rules.bzl b/cmake_rules.bzl
 new file mode 100644
-index 00000000..6c95a779
+index 00000000..a46a04f7
 --- /dev/null
 +++ b/cmake_rules.bzl
-@@ -0,0 +1,110 @@
+@@ -0,0 +1,113 @@
 +"""Utilities for building with CMake in Bazel."""
 +
 +def _cmake_build_impl(ctx):
@@ -289,6 +289,9 @@ index 00000000..6c95a779
 +    cmake_configure_cmd = "cmake {} ..".format(cmake_args)
 +    cmake_build_cmd = "cmake --build . -j32"
 +    install_folder = ctx.attr.path_to_bazel_byproducts
++    cmake_folder = ctx.attr.path_to_cmake_lists
++    print("DEBUG: install folder %s cmake folder %s" %
++          (install_folder, cmake_folder))
 +    # Find the C++ toolchain
 +    cc_toolchain = ctx.attr._cc_toolchain[cc_common.CcToolchainInfo]
 +    if not cc_toolchain:
@@ -317,7 +320,7 @@ index 00000000..6c95a779
 +    cp -r include/* $root/$install_folder/include/
 +    """.format(
 +        ctx.genfiles_dir.path,
-+        ctx.attr.path_to_cmake_lists,
++        cmake_folder,
 +        install_folder,
 +        configure=cmake_configure_cmd,
 +        build=cmake_build_cmd)
