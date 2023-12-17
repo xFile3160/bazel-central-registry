@@ -1,7 +1,7 @@
-From c899fedf041819408155d660e87d8f77ebea1686 Mon Sep 17 00:00:00 2001
+From 0fc198f1a6f25685952b454b98767896bde145e8 Mon Sep 17 00:00:00 2001
 From: Cesare Mercurio <cesare.mercurio@gmail.com>
 Date: Sat, 16 Dec 2023 18:39:31 -0800
-Subject: [PATCH] VVI-Halide-patch : add BUILD file
+Subject: [PATCH 2/2] VVI-Halide-patch : add BUILD file
 
 Summary:
 Adds build file for bazel enviornment with bzlmod
@@ -10,8 +10,8 @@ Test Plan:
 integration in vvplatform
 ---
  BUILD      | 65 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
- halide.bzl | 26 ++++++++++++++++++++++
- 2 files changed, 91 insertions(+)
+ halide.bzl | 25 +++++++++++++++++++++
+ 2 files changed, 90 insertions(+)
  create mode 100644 BUILD
  create mode 100644 halide.bzl
 
@@ -89,13 +89,12 @@ index 000000000..618103e0d
 \ No newline at end of file
 diff --git a/halide.bzl b/halide.bzl
 new file mode 100644
-index 000000000..f8c05eadc
+index 000000000..55d0dad1b
 --- /dev/null
 +++ b/halide.bzl
-@@ -0,0 +1,26 @@
+@@ -0,0 +1,25 @@
 +"""Bazel build rules for Halide."""
 +
-+load("@bazel_skylib//lib:collections.bzl", "collections")
 +load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "use_cpp_toolchain")
 +
 +def halide_language_copts():
