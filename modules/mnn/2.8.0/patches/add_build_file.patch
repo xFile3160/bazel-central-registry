@@ -1,4 +1,4 @@
-From 2d4ff2ae9e44700bed28dece6ee8226d2a369230 Mon Sep 17 00:00:00 2001
+From 096a9786c8d3b743f9cf0a3625bbae35832c676b Mon Sep 17 00:00:00 2001
 From: Cesare Mercurio <cesare.mercurio@gmail.com>
 Date: Sat, 16 Dec 2023 10:54:50 -0800
 Subject: [PATCH] VVI-mnn-patch : Add build stages for bazel bzlmod integration
@@ -19,7 +19,7 @@ integration in vvplatform
 
 diff --git a/BUILD b/BUILD
 new file mode 100644
-index 00000000..36fcad0a
+index 00000000..eb033d57
 --- /dev/null
 +++ b/BUILD
 @@ -0,0 +1,248 @@
@@ -217,7 +217,7 @@ index 00000000..36fcad0a
 +    libraries = [
 +        "libMNN.a"
 +    ] + if_ios_arm64(["libMNNCoreML.a"])
-+      + if_ios_armv7(["libMNNCoreML.a"])
++      + if_ios_armv7(["libMNNCoreML.a"]),
 +    path_to_bazel_byproducts = "external/mnn~2.8.0",
 +    path_to_cmake_lists = "external/mnn~2.8.0",
 +    binaries = [
