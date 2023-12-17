@@ -1,4 +1,4 @@
-From 17f71a4cac95753addcd6084e72c80d84e950959 Mon Sep 17 00:00:00 2001
+From 86e02bbd465ee9540facc5748a50959a90bff432 Mon Sep 17 00:00:00 2001
 From: Cesare Mercurio <cesare.mercurio@gmail.com>
 Date: Sat, 16 Dec 2023 10:54:50 -0800
 Subject: [PATCH] VVI-mnn-patch : Add build stages for bazel bzlmod integration
@@ -10,9 +10,9 @@ Test Plan:
 integration in vvplatform
 ---
  BUILD           | 250 ++++++++++++++++++++++++++++++++++++++++++++++++
- cmake_rules.bzl | 110 +++++++++++++++++++++
+ cmake_rules.bzl | 108 +++++++++++++++++++++
  platform.bzl    |  85 ++++++++++++++++
- 3 files changed, 445 insertions(+)
+ 3 files changed, 443 insertions(+)
  create mode 100644 BUILD
  create mode 100644 cmake_rules.bzl
  create mode 100644 platform.bzl
@@ -220,8 +220,8 @@ index 00000000..73128201
 +      + if_ios_arm64(["libMNNCoreML.a"])
 +      + if_ios_armv7(["libMNNCoreML.a"])
 +      + if_darwin_arm64(["libMNNCoreML.a"]),
-+    path_to_bazel_byproducts = "external/mnn~2.8.0",
-+    path_to_cmake_lists = "external/mnn~2.8.0",
++    path_to_bazel_byproducts = "third_party/mnn",
++    path_to_cmake_lists = "external/mnn_repo",
 +    binaries = [
 +        "MNNConvert",
 +        "MNNV2Basic.out",
@@ -275,10 +275,10 @@ index 00000000..73128201
 +)
 diff --git a/cmake_rules.bzl b/cmake_rules.bzl
 new file mode 100644
-index 00000000..6c95a779
+index 00000000..8330f1ca
 --- /dev/null
 +++ b/cmake_rules.bzl
-@@ -0,0 +1,110 @@
+@@ -0,0 +1,108 @@
 +"""Utilities for building with CMake in Bazel."""
 +
 +def _cmake_build_impl(ctx):
@@ -305,7 +305,6 @@ index 00000000..6c95a779
 +    # Create a shell command to run the CMake commands
 +    cmd = """
 +    root=$(pwd)/{}
-# +    cd {}
 +    install_folder={}
 +    mkdir -p build && cd build
 +    mkdir -p $root/$install_folder/include/
@@ -317,7 +316,6 @@ index 00000000..6c95a779
 +    cp -r include/* $root/$install_folder/include/
 +    """.format(
 +        ctx.genfiles_dir.path,
-# +        ctx.attr.path_to_cmake_lists,
 +        install_folder,
 +        configure=cmake_configure_cmd,
 +        build=cmake_build_cmd)
