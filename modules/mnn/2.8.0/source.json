@@ -3,7 +3,7 @@
     "patch_strip": 1,
     "patches": {
         "cmake_fix_vv.patch": "sha256-8jEhwsDWA0XUwWDZGYPKG3KpgQmEj47J/NhPBm1kmTc=",
-        "add_build_file.patch": "sha256-621v2xnVAri7HgASl5TSrCTDODxNb4AGm4ul4d9386Q=",
+        "add_build_file.patch": "sha256-I0+FDA0UjWY79Uz6Bh0uOgKW7GihPngPRBvg/X+c6II=",
         "add_module_dot_bazel.patch": "sha256-pKnfcIGLzBLQHSupx5q1qZQhKZzjrnx+E6V0amm41mU="
     },
     "strip_prefix": "MNN-2.8.0",

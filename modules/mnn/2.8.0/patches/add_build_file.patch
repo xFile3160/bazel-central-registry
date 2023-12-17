@@ -220,8 +220,8 @@ index 00000000..73128201
 +      + if_ios_arm64(["libMNNCoreML.a"])
 +      + if_ios_armv7(["libMNNCoreML.a"])
 +      + if_darwin_arm64(["libMNNCoreML.a"]),
-+    path_to_bazel_byproducts = "third_party/mnn",
-+    path_to_cmake_lists = "external/mnn_repo",
++    path_to_bazel_byproducts = "external/mnn~2.8.0",
++    path_to_cmake_lists = "external/mnn~2.8.0",
 +    binaries = [
 +        "MNNConvert",
 +        "MNNV2Basic.out",
