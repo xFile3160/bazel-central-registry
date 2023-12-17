@@ -1,4 +1,4 @@
-From 976efa5f99134836c14e0c36a37304dee5c90d8c Mon Sep 17 00:00:00 2001
+From 2b6ad21a2470869355d4764ce71caa160efe5afa Mon Sep 17 00:00:00 2001
 From: Cesare Mercurio <cesare.mercurio@gmail.com>
 Date: Sat, 16 Dec 2023 10:54:50 -0800
 Subject: [PATCH] VVI-mnn-patch : Add build stages for bazel bzlmod integration
@@ -10,9 +10,9 @@ Test Plan:
 integration in vvplatform
 ---
  BUILD           | 250 ++++++++++++++++++++++++++++++++++++++++++++++++
- cmake_rules.bzl | 116 ++++++++++++++++++++++
+ cmake_rules.bzl | 114 ++++++++++++++++++++++
  platform.bzl    |  85 ++++++++++++++++
- 3 files changed, 451 insertions(+)
+ 3 files changed, 449 insertions(+)
  create mode 100644 BUILD
  create mode 100644 cmake_rules.bzl
  create mode 100644 platform.bzl
@@ -275,10 +275,10 @@ index 00000000..5e5ae8db
 +)
 diff --git a/cmake_rules.bzl b/cmake_rules.bzl
 new file mode 100644
-index 00000000..2439357e
+index 00000000..f9d3f481
 --- /dev/null
 +++ b/cmake_rules.bzl
-@@ -0,0 +1,116 @@
+@@ -0,0 +1,114 @@
 +"""Utilities for building with CMake in Bazel."""
 +
 +def _cmake_build_impl(ctx):
@@ -311,10 +311,9 @@ index 00000000..2439357e
 +    # Create a shell command to run the CMake commands
 +    cmd = """
 +    root=$(pwd)/{}
-+    cd {}
 +    install_folder={}
-+    mkdir -p build && cd build
 +    mkdir -p $root/$install_folder/include/
++    mkdir -p build && cd build
 +    {configure}
 +    {build}
 +    echo "Copying libraries and binaries to $root/$install_folder"
@@ -323,7 +322,6 @@ index 00000000..2439357e
 +    cp -r include/* $root/$install_folder/include/
 +    """.format(
 +        ctx.genfiles_dir.path,
-+        cmake_folder,
 +        install_folder,
 +        configure=cmake_configure_cmd,
 +        build=cmake_build_cmd)
