@@ -1,0 +1,10 @@
+{
+    "integrity": "sha256-4M8u+b7ZllrI9Ji0pwB7nwAC+gIsH/Zl8larVCYNYwU=",
+    "patch_strip": 1,
+    "patches": {
+        "add_build_file.patch": "sha256-CoSl4+Psy7Y10G7aoi54CtwDzQ2+Ie8GU6h0a3F6ZKs=",
+        "add_module_dot_bazel.patch": "sha256-K4TgUVlSc18b8vpOC7ZC0YOlMjZhZumPhGrjphMxBP8="
+    },
+    "strip_prefix": "node-addon-api-7.0.0",
+    "url": "https://github.com/nodejs/node-addon-api/archive/refs/tags/v7.0.0.tar.gz"
+}

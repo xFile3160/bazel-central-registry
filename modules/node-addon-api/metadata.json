@@ -1,0 +1,11 @@
+{
+    "homepage": "https://github.com/nodejs/node-addon-api",
+    "maintainers": [],
+    "repository": [
+        "github:nodejs/node-addon-api"
+    ],
+    "versions": [
+        "7.0.0"
+    ],
+    "yanked_versions": {}
+}

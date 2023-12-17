@@ -1,0 +1,31 @@
+From 62addcb12f24e8028a97a38fdbbc2f6a66d01a49 Mon Sep 17 00:00:00 2001
+From: Cesare Mercurio <cesare.mercurio@gmail.com>
+Date: Sun, 17 Dec 2023 07:43:54 -0800
+Subject: [PATCH 1/2] VVI-node-addon-api : Add MODULE bazel file for bzlmod
+
+Summary:
+Adds bzlmod module bazel dependency
+
+Test Plan:
+integration with vvplatform
+---
+ MODULE.bazel | 6 ++++++
+ 1 file changed, 6 insertions(+)
+ create mode 100644 MODULE.bazel
+
+diff --git a/MODULE.bazel b/MODULE.bazel
+new file mode 100644
+index 0000000..da7aba2
+--- /dev/null
++++ b/MODULE.bazel
+@@ -0,0 +1,6 @@
++module(
++    name = "node-addon-api",
++    version = "7.0.0",
++    compatibility_level = 1,
++)
++bazel_dep(name = "rules_cc", version = "0.0.5")
+\ No newline at end of file
+-- 
+2.34.1
+
