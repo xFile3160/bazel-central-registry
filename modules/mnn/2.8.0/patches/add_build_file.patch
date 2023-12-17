@@ -1,4 +1,4 @@
-From 9278658e479a16638c0dbdbf5475e65278e09b06 Mon Sep 17 00:00:00 2001
+From 17f71a4cac95753addcd6084e72c80d84e950959 Mon Sep 17 00:00:00 2001
 From: Cesare Mercurio <cesare.mercurio@gmail.com>
 Date: Sat, 16 Dec 2023 10:54:50 -0800
 Subject: [PATCH] VVI-mnn-patch : Add build stages for bazel bzlmod integration
@@ -9,9 +9,9 @@ Adds build files for bzlmod and cmake_rules
 Test Plan:
 integration in vvplatform
 ---
- BUILD           |  85 ++++++++++++++++
+ BUILD           | 250 ++++++++++++++++++++++++++++++++++++++++++++++++
  cmake_rules.bzl | 110 +++++++++++++++++++++
- platform.bzl    | 250 ++++++++++++++++++++++++++++++++++++++++++++++++
+ platform.bzl    |  85 ++++++++++++++++
  3 files changed, 445 insertions(+)
  create mode 100644 BUILD
  create mode 100644 cmake_rules.bzl
@@ -19,12 +19,177 @@ integration in vvplatform
 
 diff --git a/BUILD b/BUILD
 new file mode 100644
-index 00000000..76f3e843
+index 00000000..73128201
 --- /dev/null
 +++ b/BUILD
-@@ -0,0 +1,85 @@
+@@ -0,0 +1,250 @@
 +load("@rules_cc//cc:defs.bzl", "cc_library")
 +load(":cmake_rules.bzl", "cmake_build")
++
++config_setting(
++    name = "linux_base",
++    define_values = {
++        "linux_base": "true",
++    },
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "host",
++    define_values = {
++        "host": "true",
++    },
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "linux",
++    define_values = {
++        "linux": "true",
++        "linux_base": "true",
++        "host": "true",
++    },
++    visibility = ["//visibility:public"],
++)
++
++# Note: yes, these need to use "//external:android/crosstool", not
++# @androidndk//:default_crosstool.
++
++config_setting(
++    name = "android",
++    values = {"crosstool_top": "//external:android/crosstool"},
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "android_x86",
++    values = {
++        "crosstool_top": "//external:android/crosstool",
++        "cpu": "x86",
++    },
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "android_x86_64",
++    values = {
++        "crosstool_top": "//external:android/crosstool",
++        "cpu": "x86_64",
++    },
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "android_arm",
++    values = {
++        "crosstool_top": "//external:android/crosstool",
++        "cpu": "armeabi-v7a",
++    },
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "android_arm64",
++    values = {
++        "crosstool_top": "//external:android/crosstool",
++        "cpu": "arm64-v8a",
++    },
++    visibility = ["//visibility:public"],
++)
++
++# Note: this cannot just match "apple_platform_type": "macos" because that option
++# defaults to "macos" even when building on Linux!
++alias(
++    name = "macos",
++    actual = select({
++        ":macos_i386": ":macos_i386",
++        ":macos_x86_64": ":macos_x86_64",
++        ":macos_arm64": ":macos_arm64",
++        "//conditions:default": ":macos_i386",  # Arbitrarily chosen from above.
++    }),
++    visibility = ["//visibility:public"],
++)
++
++# Note: this also matches on crosstool_top so that it does not produce ambiguous
++# selectors when used together with "android".
++config_setting(
++    name = "ios",
++    values = {
++        "crosstool_top": "@bazel_tools//tools/cpp:toolchain",
++        "apple_platform_type": "ios",
++    },
++    visibility = ["//visibility:public"],
++)
++
++alias(
++    name = "apple",
++    actual = select({
++        ":macos": ":macos",
++        ":ios": ":ios",
++        "//conditions:default": ":ios",  # Arbitrarily chosen from above.
++    }),
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "macos_i386",
++    values = {
++        "apple_platform_type": "macos",
++        "cpu": "darwin",
++    },
++    define_values = {
++        "host": "true"
++    },
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "macos_x86_64",
++    values = {
++        "apple_platform_type": "macos",
++        "cpu": "darwin_x86_64",
++    },
++    define_values = {
++        "host": "true"
++    },
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "macos_arm64",
++    values = {
++        "apple_platform_type": "macos",
++        "cpu": "darwin_arm64",
++    },
++    define_values = {
++        "host": "true"
++    },
++    visibility = ["//visibility:public"],
++)
++
++[
++    config_setting(
++        name = arch,
++        values = {"cpu": arch},
++        visibility = ["//visibility:public"],
++    )
++    for arch in [
++        "ios_i386",
++        "ios_x86_64",
++        "ios_armv7",
++        "ios_arm64",
++        "ios_arm64e",
++    ]
++]
++
++config_setting(
++    name = "windows",
++    values = {"cpu": "x64_windows"},
++    define_values = {
++        "host": "true"
++    },
++    visibility = ["//visibility:public"],
++)
 +
 +load(
 +    ":platform.bzl",
@@ -226,176 +391,11 @@ index 00000000..6c95a779
 +)
 diff --git a/platform.bzl b/platform.bzl
 new file mode 100644
-index 00000000..432c83e4
+index 00000000..f2076e4b
 --- /dev/null
 +++ b/platform.bzl
-@@ -0,0 +1,250 @@
+@@ -0,0 +1,85 @@
 +"""Platform definitions for select rules in bazel"""
-+
-+config_setting(
-+    name = "linux_base",
-+    define_values = {
-+        "linux_base": "true",
-+    },
-+    visibility = ["//visibility:public"],
-+)
-+
-+config_setting(
-+    name = "host",
-+    define_values = {
-+        "host": "true",
-+    },
-+    visibility = ["//visibility:public"],
-+)
-+
-+config_setting(
-+    name = "linux",
-+    define_values = {
-+        "linux": "true",
-+        "linux_base": "true",
-+        "host": "true",
-+    },
-+    visibility = ["//visibility:public"],
-+)
-+
-+# Note: yes, these need to use "//external:android/crosstool", not
-+# @androidndk//:default_crosstool.
-+
-+config_setting(
-+    name = "android",
-+    values = {"crosstool_top": "//external:android/crosstool"},
-+    visibility = ["//visibility:public"],
-+)
-+
-+config_setting(
-+    name = "android_x86",
-+    values = {
-+        "crosstool_top": "//external:android/crosstool",
-+        "cpu": "x86",
-+    },
-+    visibility = ["//visibility:public"],
-+)
-+
-+config_setting(
-+    name = "android_x86_64",
-+    values = {
-+        "crosstool_top": "//external:android/crosstool",
-+        "cpu": "x86_64",
-+    },
-+    visibility = ["//visibility:public"],
-+)
-+
-+config_setting(
-+    name = "android_arm",
-+    values = {
-+        "crosstool_top": "//external:android/crosstool",
-+        "cpu": "armeabi-v7a",
-+    },
-+    visibility = ["//visibility:public"],
-+)
-+
-+config_setting(
-+    name = "android_arm64",
-+    values = {
-+        "crosstool_top": "//external:android/crosstool",
-+        "cpu": "arm64-v8a",
-+    },
-+    visibility = ["//visibility:public"],
-+)
-+
-+# Note: this cannot just match "apple_platform_type": "macos" because that option
-+# defaults to "macos" even when building on Linux!
-+alias(
-+    name = "macos",
-+    actual = select({
-+        ":macos_i386": ":macos_i386",
-+        ":macos_x86_64": ":macos_x86_64",
-+        ":macos_arm64": ":macos_arm64",
-+        "//conditions:default": ":macos_i386",  # Arbitrarily chosen from above.
-+    }),
-+    visibility = ["//visibility:public"],
-+)
-+
-+# Note: this also matches on crosstool_top so that it does not produce ambiguous
-+# selectors when used together with "android".
-+config_setting(
-+    name = "ios",
-+    values = {
-+        "crosstool_top": "@bazel_tools//tools/cpp:toolchain",
-+        "apple_platform_type": "ios",
-+    },
-+    visibility = ["//visibility:public"],
-+)
-+
-+alias(
-+    name = "apple",
-+    actual = select({
-+        ":macos": ":macos",
-+        ":ios": ":ios",
-+        "//conditions:default": ":ios",  # Arbitrarily chosen from above.
-+    }),
-+    visibility = ["//visibility:public"],
-+)
-+
-+config_setting(
-+    name = "macos_i386",
-+    values = {
-+        "apple_platform_type": "macos",
-+        "cpu": "darwin",
-+    },
-+    define_values = {
-+        "host": "true"
-+    },
-+    visibility = ["//visibility:public"],
-+)
-+
-+config_setting(
-+    name = "macos_x86_64",
-+    values = {
-+        "apple_platform_type": "macos",
-+        "cpu": "darwin_x86_64",
-+    },
-+    define_values = {
-+        "host": "true"
-+    },
-+    visibility = ["//visibility:public"],
-+)
-+
-+config_setting(
-+    name = "macos_arm64",
-+    values = {
-+        "apple_platform_type": "macos",
-+        "cpu": "darwin_arm64",
-+    },
-+    define_values = {
-+        "host": "true"
-+    },
-+    visibility = ["//visibility:public"],
-+)
-+
-+[
-+    config_setting(
-+        name = arch,
-+        values = {"cpu": arch},
-+        visibility = ["//visibility:public"],
-+    )
-+    for arch in [
-+        "ios_i386",
-+        "ios_x86_64",
-+        "ios_armv7",
-+        "ios_arm64",
-+        "ios_arm64e",
-+    ]
-+]
-+
-+config_setting(
-+    name = "windows",
-+    values = {"cpu": "x64_windows"},
-+    define_values = {
-+        "host": "true"
-+    },
-+    visibility = ["//visibility:public"],
-+)
 +
 +def if_host(a, default_value = []):
 +    return select({
