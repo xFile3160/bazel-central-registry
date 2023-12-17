@@ -1,0 +1,10 @@
+{
+    "integrity": "sha256-kQZwBjTnnPoJNevWcZf2RonO0kxC2nAqzxj6hDW9ioI=",
+    "patch_strip": 1,
+    "patches": {
+        "add_build_file.patch": "sha256-mkJT2lT3M/KwoojRtiq6YpJ7LTOmCIfcXYNuhJ0uBbo=",
+        "add_module_dot_bazel.patch": "sha256-b4FNlGe5VIpd1cSHc7DZtI4r9DWBUhXKajtMTUNZPUI="
+    },
+    "strip_prefix": "OpenCL-CLHPP-2023.12.14",
+    "url": "https://github.com/KhronosGroup/OpenCL-CLHPP/archive/refs/tags/v2023.12.14.tar.gz"
+}

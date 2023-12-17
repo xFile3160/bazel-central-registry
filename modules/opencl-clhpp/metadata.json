@@ -1,0 +1,11 @@
+{
+    "homepage": "https://github.com/KhronosGroup/OpenCL-CLHPP",
+    "maintainers": [],
+    "repository": [
+        "github:KhronosGroup/OpenCL-CLHPP"
+    ],
+    "versions": [
+        "2023.12.14"
+    ],
+    "yanked_versions": {}
+}

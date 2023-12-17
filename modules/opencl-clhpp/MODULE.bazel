@@ -1,0 +1,9 @@
+"""Module opencl-clhpp"""
+
+module(
+    name = "opencl-clhpp",
+    version = "2023.12.14",
+    compatibility_level = 1,
+)
+
+bazel_dep(name = "rules_cc", version = "0.0.9")

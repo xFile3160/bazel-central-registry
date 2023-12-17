@@ -1,0 +1,10 @@
+"""Module opencl-clhpp tbzlmod dependency."""
+
+module(
+    name = "opencl-clhpp",
+    version = "2023.12.14",
+    compatibility_level = 1,
+)
+bazel_dep(name = "rules_cc", version = "0.0.1")
+# to make sha256 work do this:
+# openssl dgst -sha256 -binary <file> | openssl base64 -A | sed 's/^/sha256-/'

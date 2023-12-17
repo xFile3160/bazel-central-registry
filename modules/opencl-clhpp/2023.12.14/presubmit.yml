@@ -1,0 +1,16 @@
+platforms:
+  centos7:
+    build_targets:
+    - '@opencl-clhpp//:opencl-clhpp'
+  debian10:
+    build_targets:
+    - '@opencl-clhpp//:opencl-clhpp'
+  macos:
+    build_targets:
+    - '@opencl-clhpp//:opencl-clhpp'
+  ubuntu2004:
+    build_targets:
+    - '@opencl-clhpp//:opencl-clhpp'
+  windows:
+    build_targets:
+    - '@opencl-clhpp//:opencl-clhpp'
