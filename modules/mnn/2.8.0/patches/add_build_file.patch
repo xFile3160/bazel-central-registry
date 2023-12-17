@@ -305,7 +305,7 @@ index 00000000..6c95a779
 +    # Create a shell command to run the CMake commands
 +    cmd = """
 +    root=$(pwd)/{}
-# +    cd {}
++    cd {}
 +    install_folder={}
 +    mkdir -p build && cd build
 +    mkdir -p $root/$install_folder/include/
@@ -317,7 +317,7 @@ index 00000000..6c95a779
 +    cp -r include/* $root/$install_folder/include/
 +    """.format(
 +        ctx.genfiles_dir.path,
-# +        ctx.attr.path_to_cmake_lists,
++        ctx.attr.path_to_cmake_lists,
 +        install_folder,
 +        configure=cmake_configure_cmd,
 +        build=cmake_build_cmd)
