@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-From 32b016975f1f677bca2bae62478ba583254edfe5 Mon Sep 17 00:00:00 2001
-=======
-From 68c70bf539e8a65c1742b2c6117f142197123470 Mon Sep 17 00:00:00 2001
->>>>>>> 5cc6358 (VVI-bcr : Add MacOS framework for MNN)
+From 8c058de7a816a15c3ea5fdbeac6ac5731391de4a Mon Sep 17 00:00:00 2001
 From: Cesare Mercurio <cesare.mercurio@gmail.com>
 Date: Sat, 16 Dec 2023 10:54:50 -0800
 Subject: [PATCH] VVI-mnn-patch : Add build stages for bazel bzlmod integration
@@ -12,35 +8,33 @@ Adds build files for bzlmod and cmake_rules
 
 Test Plan:
 integration in vvplatform
+
+VVI-bcr : Disable Metal and CoreML for darwin
+
+Summary:
+Temporarily disable Metal and CoreML backend.
+System goes with linker errors with Metal and CoreML,
+only when building pybind and nodejs. Without those flags,
+the linkopt are not touched with -framework CoreVideo and
+there is no issue when linking the package in pybind and nodejs.
+Very weird, yet I'havent figured it out yet.
+Test Plan:
+integration
 ---
-<<<<<<< HEAD
  BUILD           | 250 ++++++++++++++++++++++++++++++++++++++++++++++++
  cmake_rules.bzl | 114 ++++++++++++++++++++++
  platform.bzl    |  85 ++++++++++++++++
  3 files changed, 449 insertions(+)
-=======
- BUILD           | 249 ++++++++++++++++++++++++++++++++++++++++++++++++
- cmake_rules.bzl | 114 ++++++++++++++++++++++
- platform.bzl    |  85 +++++++++++++++++
- 3 files changed, 448 insertions(+)
->>>>>>> 5cc6358 (VVI-bcr : Add MacOS framework for MNN)
  create mode 100644 BUILD
  create mode 100644 cmake_rules.bzl
  create mode 100644 platform.bzl
 
 diff --git a/BUILD b/BUILD
 new file mode 100644
-<<<<<<< HEAD
-index 00000000..5e5ae8db
+index 00000000..f481b057
 --- /dev/null
 +++ b/BUILD
 @@ -0,0 +1,250 @@
-=======
-index 00000000..1c175197
---- /dev/null
-+++ b/BUILD
-@@ -0,0 +1,249 @@
->>>>>>> 5cc6358 (VVI-bcr : Add MacOS framework for MNN)
 +load("@rules_cc//cc:defs.bzl", "cc_library")
 +load(":cmake_rules.bzl", "cmake_build")
 +
@@ -235,9 +229,9 @@ index 00000000..1c175197
 +    libraries = [
 +        "libMNN.a"
 +    ] + if_darwin(["libMNNCoreML.a"])
++      + if_darwin_arm64(["libMNNCoreML.a"])
 +      + if_ios_arm64(["libMNNCoreML.a"])
-+      + if_ios_armv7(["libMNNCoreML.a"])
-+      + if_darwin_arm64(["libMNNCoreML.a"]),
++      + if_ios_armv7(["libMNNCoreML.a"]),
 +    path_to_bazel_byproducts = "external/mnn~2.8.0",
 +    path_to_cmake_lists = "external/mnn~2.8.0",
 +    binaries = [
@@ -270,14 +264,12 @@ index 00000000..1c175197
 +        "-DMNN_BUILD_CONVERTER=true",
 +        "-DMNN_BUILD_SHARED_LIBS=OFF",
 +        "-DMNN_PORTABLE_BUILD=ON",
-
-+    ] + if_darwin(["-DMNN_METAL=ON", "-DMNN_USE_SYSTEM_LIB=ON", "-DMNN_AAPL_FMWK=ON"])
-+      + if_darwin_arm64(["-DMNN_METAL=ON", "-DMNN_USE_SYSTEM_LIB=ON", "-DMNN_COREML=ON", "-DMNN_ARM82", "-DMNN_AAPL_FMWK=ON"])
++    ] + if_darwin(["-DMNN_METAL=ON", "-DMNN_USE_SYSTEM_LIB=ON", "-DMNN_ARM82"])
 +      + if_ios_arm64(["-DMNN_METAL=ON", "-DMNN_COREML=ON", "-DMNN_USE_SYSTEM_LIB=ON"])
 +      + if_ios_armv7(["-DMNN_METAL=ON", "-DMNN_COREML=ON", "-DMNN_USE_SYSTEM_LIB=ON"])
 +      + if_linux(["-DMNN_OPENCL=ON", "-DMNN_USE_SYSTEM_LIB=ON"])
-+      + if_android_arm64(["-DMNN_VULKAN=ON", "-DMNN_OPENGL=ON", "-DMNN_OPENCL=ON"])
-+      + if_android_arm(["-DMNN_VULKAN=ON", "-DMNN_OPENGL=ON", "-DMNN_OPENCL=ON"])
++      + if_android_arm64(["-DMNN_VULKAN=ON", "-DMNN_OPENGL=ON", "-DMNN_OPENCL=ON", "-DMNN_NNAPI", "-DMNN_USE_LOGCAT=ON", "-DMNN_ARM82=ON"])
++      + if_android_arm(["-DMNN_VULKAN=ON", "-DMNN_OPENGL=ON", "-DMNN_OPENCL=ON", "-DMNN_NNAPI", "-DMNN_USE_LOGCAT=ON", "-DMNN_ARM82=ON"])
 +      + if_windows(["-DMNN_OPENGL=ON", "-DMNN_USE_SYSTEM_LIB=ON"]),
 +)
 +
@@ -505,5 +497,5 @@ index 00000000..f2076e4b
 +        "//conditions:default": [],
 +    })
 -- 
-2.34.1
+2.43.0
 
