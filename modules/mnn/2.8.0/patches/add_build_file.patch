@@ -1,4 +1,4 @@
-From d89d0516591d9957695ac859fbdf028de695ec81 Mon Sep 17 00:00:00 2001
+From 28d14063560b3426140dd8b2f8a3ca663e1634ca Mon Sep 17 00:00:00 2001
 From: Cesare Mercurio <cesare.mercurio@gmail.com>
 Date: Sat, 16 Dec 2023 10:54:50 -0800
 Subject: [PATCH] VVI-mnn-patch : Add build stages for bazel bzlmod integration
@@ -31,7 +31,7 @@ integration
 
 diff --git a/BUILD b/BUILD
 new file mode 100644
-index 00000000..94340092
+index 00000000..31057988
 --- /dev/null
 +++ b/BUILD
 @@ -0,0 +1,251 @@
@@ -265,7 +265,7 @@ index 00000000..94340092
 +        "-DMNN_BUILD_SHARED_LIBS=OFF",
 +        "-DMNN_PORTABLE_BUILD=ON",
 +    ] + if_darwin(["-DMNN_METAL=ON", "-DMNN_USE_SYSTEM_LIB=ON", "-DMNN_ARM82=ON"])
-+      + if_darwin_arm64(["-DMNN_METAL=ON", "-DMNN_USE_SYSTEM_LIB=ON", "-DMNN_ARM82=ON", "-DMNN_COREML=ON", "-DARCHS="arm64", "-DCMAKE_OSX_ARCHITECTURES=arm64"])
++      + if_darwin_arm64(["-DMNN_METAL=ON", "-DMNN_USE_SYSTEM_LIB=ON", "-DMNN_ARM82=ON", "-DMNN_COREML=ON", "-DARCHS=arm64", "-DCMAKE_OSX_ARCHITECTURES=arm64"])
 +      + if_ios_arm64(["-DMNN_METAL=ON", "-DMNN_COREML=ON", "-DMNN_USE_SYSTEM_LIB=ON", "-DMNN_ARM82=ON"])
 +      + if_ios_armv7(["-DMNN_METAL=ON", "-DMNN_COREML=ON", "-DMNN_USE_SYSTEM_LIB=ON", "-DMNN_ARM82=ON"])
 +      + if_linux(["-DMNN_OPENCL=ON", "-DMNN_USE_SYSTEM_LIB=ON"])
