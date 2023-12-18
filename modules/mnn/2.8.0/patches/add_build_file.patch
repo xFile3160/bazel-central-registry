@@ -1,4 +1,4 @@
-From ffd64e82e971c5a66b5cc507c5f99a0bf770a3e5 Mon Sep 17 00:00:00 2001
+From 189ae4c4383a3c5d2e0e14eaff13eac28d86a52b Mon Sep 17 00:00:00 2001
 From: Cesare Mercurio <cesare.mercurio@gmail.com>
 Date: Sat, 16 Dec 2023 10:54:50 -0800
 Subject: [PATCH] VVI-mnn-patch : Add build stages for bazel bzlmod integration
@@ -31,7 +31,7 @@ integration
 
 diff --git a/BUILD b/BUILD
 new file mode 100644
-index 00000000..70976dc3
+index 00000000..be8166c2
 --- /dev/null
 +++ b/BUILD
 @@ -0,0 +1,249 @@
@@ -263,7 +263,7 @@ index 00000000..70976dc3
 +        "-DMNN_BUILD_SHARED_LIBS=OFF",
 +        "-DMNN_PORTABLE_BUILD=ON",
 +    ] + if_darwin(["-DMNN_USE_SYSTEM_LIB=ON"])
-+      + if_darwin_arm64(["-DMNN_USE_SYSTEM_LIB=ON", "-DMNN_ARM82=ON"])
++      + if_darwin_arm64(["-DMNN_USE_SYSTEM_LIB=ON", "-DMNN_ARM82"])
 +      + if_ios_arm64(["-DMNN_METAL=ON", "-DMNN_COREML=ON", "-DMNN_USE_SYSTEM_LIB=ON"])
 +      + if_ios_armv7(["-DMNN_METAL=ON", "-DMNN_COREML=ON", "-DMNN_USE_SYSTEM_LIB=ON"])
 +      + if_linux(["-DMNN_OPENCL=ON", "-DMNN_USE_SYSTEM_LIB=ON"])
