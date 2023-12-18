@@ -1,4 +1,4 @@
-From 8c058de7a816a15c3ea5fdbeac6ac5731391de4a Mon Sep 17 00:00:00 2001
+From d89d0516591d9957695ac859fbdf028de695ec81 Mon Sep 17 00:00:00 2001
 From: Cesare Mercurio <cesare.mercurio@gmail.com>
 Date: Sat, 16 Dec 2023 10:54:50 -0800
 Subject: [PATCH] VVI-mnn-patch : Add build stages for bazel bzlmod integration
@@ -21,20 +21,20 @@ Very weird, yet I'havent figured it out yet.
 Test Plan:
 integration
 ---
- BUILD           | 250 ++++++++++++++++++++++++++++++++++++++++++++++++
+ BUILD           | 251 ++++++++++++++++++++++++++++++++++++++++++++++++
  cmake_rules.bzl | 114 ++++++++++++++++++++++
  platform.bzl    |  85 ++++++++++++++++
- 3 files changed, 449 insertions(+)
+ 3 files changed, 450 insertions(+)
  create mode 100644 BUILD
  create mode 100644 cmake_rules.bzl
  create mode 100644 platform.bzl
 
 diff --git a/BUILD b/BUILD
 new file mode 100644
-index 00000000..f481b057
+index 00000000..94340092
 --- /dev/null
 +++ b/BUILD
-@@ -0,0 +1,250 @@
+@@ -0,0 +1,251 @@
 +load("@rules_cc//cc:defs.bzl", "cc_library")
 +load(":cmake_rules.bzl", "cmake_build")
 +
@@ -264,9 +264,10 @@ index 00000000..f481b057
 +        "-DMNN_BUILD_CONVERTER=true",
 +        "-DMNN_BUILD_SHARED_LIBS=OFF",
 +        "-DMNN_PORTABLE_BUILD=ON",
-+    ] + if_darwin(["-DMNN_METAL=ON", "-DMNN_USE_SYSTEM_LIB=ON", "-DMNN_ARM82"])
-+      + if_ios_arm64(["-DMNN_METAL=ON", "-DMNN_COREML=ON", "-DMNN_USE_SYSTEM_LIB=ON"])
-+      + if_ios_armv7(["-DMNN_METAL=ON", "-DMNN_COREML=ON", "-DMNN_USE_SYSTEM_LIB=ON"])
++    ] + if_darwin(["-DMNN_METAL=ON", "-DMNN_USE_SYSTEM_LIB=ON", "-DMNN_ARM82=ON"])
++      + if_darwin_arm64(["-DMNN_METAL=ON", "-DMNN_USE_SYSTEM_LIB=ON", "-DMNN_ARM82=ON", "-DMNN_COREML=ON", "-DARCHS="arm64", "-DCMAKE_OSX_ARCHITECTURES=arm64"])
++      + if_ios_arm64(["-DMNN_METAL=ON", "-DMNN_COREML=ON", "-DMNN_USE_SYSTEM_LIB=ON", "-DMNN_ARM82=ON"])
++      + if_ios_armv7(["-DMNN_METAL=ON", "-DMNN_COREML=ON", "-DMNN_USE_SYSTEM_LIB=ON", "-DMNN_ARM82=ON"])
 +      + if_linux(["-DMNN_OPENCL=ON", "-DMNN_USE_SYSTEM_LIB=ON"])
 +      + if_android_arm64(["-DMNN_VULKAN=ON", "-DMNN_OPENGL=ON", "-DMNN_OPENCL=ON", "-DMNN_NNAPI", "-DMNN_USE_LOGCAT=ON", "-DMNN_ARM82=ON"])
 +      + if_android_arm(["-DMNN_VULKAN=ON", "-DMNN_OPENGL=ON", "-DMNN_OPENCL=ON", "-DMNN_NNAPI", "-DMNN_USE_LOGCAT=ON", "-DMNN_ARM82=ON"])
