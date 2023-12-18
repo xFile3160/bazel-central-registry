@@ -262,7 +262,7 @@ index 00000000..be8166c2
 +        "-DMNN_BUILD_CONVERTER=true",
 +        "-DMNN_BUILD_SHARED_LIBS=OFF",
 +        "-DMNN_PORTABLE_BUILD=ON",
-+    ] + if_darwin(["-DMNN_USE_SYSTEM_LIB=ON"])
++    ] + if_darwin([-DMNN_USE_SYSTEM_LIB=ON"])
 +      + if_darwin_arm64(["-DMNN_USE_SYSTEM_LIB=ON", "-DMNN_ARM82"])
 +      + if_ios_arm64(["-DMNN_METAL=ON", "-DMNN_COREML=ON", "-DMNN_USE_SYSTEM_LIB=ON"])
 +      + if_ios_armv7(["-DMNN_METAL=ON", "-DMNN_COREML=ON", "-DMNN_USE_SYSTEM_LIB=ON"])
