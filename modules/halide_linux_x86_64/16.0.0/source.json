@@ -2,8 +2,8 @@
     "integrity": "sha256-aUs+01nWlPgtypzMp2HZJ/35dZm3jvCv4q2IFmmubEA=",
     "patch_strip": 1,
     "patches": {
-        "add_build_file.patch": "sha256-RLsTkqxBoaNdf5MnkrVljyS5qMefUUk12muBMWa4gZc=",
-        "add_module_dot_bazel.patch": "sha256-XCqnaVYvC/zDK+oqfPUb2GKba50HjsCm7zJY3Khdxns="
+        "add_build_file.patch": "sha256-rlKAO8yWryPy9OUYEgh7D+WL5D5DBkHvM/QqyOK8tl4=",
+        "add_module_dot_bazel.patch": "sha256-0drkmJVRpcnptR+ha3fNXC5n5kiZnw5/QfC+gHN2+ok="
     },
     "strip_prefix": "Halide-16.0.0-x86-64-linux",
     "url": "https://github.com/halide/Halide/releases/download/v16.0.0/Halide-16.0.0-x86-64-linux-1e963ff817ef0968cc25d811a25a7350c8953ee6.tar.gz"

@@ -5,7 +5,8 @@
         "github:halide/Halide"
     ],
     "versions": [
-        "16.0.0"
+        "16.0.0",
+        "17.0.1"
     ],
     "yanked_versions": {}
 }

@@ -1,0 +1,10 @@
+{
+    "integrity": "sha256-W/plri52Xzv+uB0q+98Oe3Zo/1bQk6HipyUE4z0ucVs=",
+    "patch_strip": 1,
+    "patches": {
+        "add_build_file.patch": "sha256-rlKAO8yWryPy9OUYEgh7D+WL5D5DBkHvM/QqyOK8tl4=",
+        "add_module_dot_bazel.patch": "sha256-A1WeBwkIwmF2zB7T4JAVTSmSvfnaaHGEBNKEEg93LW8="
+    },
+    "strip_prefix": "Halide-17.0.1-arm-64-osx",
+    "url": "https://github.com/halide/Halide/releases/download/v17.0.1/Halide-17.0.1-arm-64-osx-52541176253e74467dabc42eeee63d9a62c199f6.tar.gz"
+}

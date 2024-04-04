@@ -1,8 +1,8 @@
-"""Module halide_macos_x86_64 to modularize the dependencies from halide macos intel version."""
+"""Module halide_macos_x86_64 to modularize the dependencies from halide windows version."""
 
 module(
     name = "halide_macos_x86_64",
-    version = "16.0.0",
+    version = "17.0.1",
     compatibility_level = 1,
 )
 

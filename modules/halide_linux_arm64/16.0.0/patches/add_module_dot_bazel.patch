@@ -22,6 +22,7 @@ index 000000000..9227b1e2c
 +module(name = "halide_linux_arm64", version = "16.0.0")
 +
 +bazel_dep(name = "rules_cc", version = "0.0.9")
++bazel_dep(name = "platforms", version = "0.0.8")
 \ No newline at end of file
 -- 
 2.34.1

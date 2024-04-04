@@ -19,7 +19,7 @@ index 000000000..9227b1e2c
 --- /dev/null
 +++ b/MODULE.bazel
 @@ -0,0 +1,3 @@
-+module(name = "halide_windows", version = "16.0.0")
++module(name = "halide_linux_x86_64", version = "17.0.1")
 +
 +bazel_dep(name = "rules_cc", version = "0.0.9")
 +bazel_dep(name = "platforms", version = "0.0.8")

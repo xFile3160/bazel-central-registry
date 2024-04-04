@@ -1,42 +1,262 @@
-From 0fc198f1a6f25685952b454b98767896bde145e8 Mon Sep 17 00:00:00 2001
+From 5f58be97735c60a8c90ac193400af288eeb1b9ee Mon Sep 17 00:00:00 2001
 From: Cesare Mercurio <cesare.mercurio@gmail.com>
-Date: Sat, 16 Dec 2023 18:39:31 -0800
-Subject: [PATCH 2/2] VVI-Halide-patch : add BUILD file
+Date: Thu, 4 Apr 2024 16:13:25 -0700
+Subject: [PATCH] JRA-Halide : Add BUILD file
 
 Summary:
-Adds build file for bazel enviornment with bzlmod
+Adds BUILD bazel file
 
 Test Plan:
-integration in vvplatform
+
+Smart Commit:
 ---
- BUILD      | 65 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
- halide.bzl | 25 +++++++++++++++++++++
- 2 files changed, 90 insertions(+)
+ BUILD      | 284 +++++++++++++++++++++++++++++++++++++++++++++++++++++
+ halide.bzl |  26 +++++
+ 2 files changed, 310 insertions(+)
  create mode 100644 BUILD
  create mode 100644 halide.bzl
 
 diff --git a/BUILD b/BUILD
 new file mode 100644
-index 000000000..618103e0d
+index 000000000..93574f90a
 --- /dev/null
 +++ b/BUILD
-@@ -0,0 +1,65 @@
+@@ -0,0 +1,284 @@
++load(":halide.bzl", "halide_language_copts")
++
 +config_setting(
-+    name = "windows",
-+    values = {"cpu": "x64_windows"},
-+    define_values = {
-+        "host": "true"
++    name = "linux",
++    constraint_values = [
++        "@platforms//os:linux",
++    ],
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "linux_x86_64",
++    constraint_values = [
++        "@platforms//os:linux",
++        "@platforms//cpu:x86_64",
++    ],
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "linux_x86_32",
++    constraint_values = [
++        "@platforms//os:linux",
++        "@platforms//cpu:x86_32",
++    ],
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "linux_arm64",
++    constraint_values = [
++        "@platforms//os:linux",
++        "@platforms//cpu:arm64",
++    ],
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "linux_arm",
++    constraint_values = [
++        "@platforms//os:linux",
++        "@platforms//cpu:arm",
++    ],
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "android",
++    constraint_values = [
++        "@platforms//os:android",
++    ],
++    values = {
++        "android_crosstool_top": "@androidndk//:toolchain",
++        "cpu": "armeabi-v7a",
 +    },
 +    visibility = ["//visibility:public"],
 +)
 +
-+load(":halide.bzl", "halide_language_copts")
++config_setting(
++    name = "android_arm",
++    constraint_values = [
++        "@platforms//os:android",
++        "@platforms//cpu:arm",
++    ],
++    values = {
++        "android_crosstool_top": "@androidndk//:toolchain",
++        "cpu": "armeabi-v7a",
++    },
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "android_arm64",
++    constraint_values = [
++        "@platforms//os:android",
++        "@platforms//cpu:arm64",
++    ],
++    values = {
++        "android_crosstool_top": "@androidndk//:toolchain",
++        "cpu": "arm64-v8a",
++    },
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "android_x86",
++    constraint_values = [
++        "@platforms//os:android",
++        "@platforms//cpu:x86_32",
++    ],
++    values = {
++        "android_crosstool_top": "@androidndk//:toolchain",
++        "cpu": "x86_32",
++    },
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "android_x86_64",
++    constraint_values = [
++        "@platforms//os:android",
++        "@platforms//cpu:x86_64",
++    ],
++    values = {
++        "android_crosstool_top": "@androidndk//:toolchain",
++        "cpu": "x86_64",
++    },
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "macos",
++    constraint_values = [
++        "@platforms//os:macos",
++    ],
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "macos_i386",
++    constraint_values = [
++        "@platforms//os:macos",
++        "@platforms//cpu:i386",
++    ],
++    values = {
++        "apple_platform_type": "macos",
++        "cpu": "darwin",
++    },
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "macos_x86_64",
++    constraint_values = [
++        "@platforms//os:macos",
++        "@platforms//cpu:x86_64",
++    ],
++    values = {
++        "apple_platform_type": "macos",
++        "cpu": "darwin_x86_64",
++    },
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "macos_arm64",
++    constraint_values = [
++        "@platforms//os:macos",
++        "@platforms//cpu:arm64",
++    ],
++    values = {
++        "apple_platform_type": "macos",
++        "cpu": "darwin_arm64",
++    },
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "ios",
++    constraint_values = [
++        "@platforms//os:ios",
++    ],
++    values = {
++        "crosstool_top": "@bazel_tools//tools/cpp:toolchain",
++        "apple_platform_type": "ios",
++    },
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "ios_i386",
++    constraint_values = [
++        "@platforms//os:ios",
++        "@platforms//cpu:i386",
++    ],
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "ios_x86_64",
++    constraint_values = [
++        "@platforms//os:ios",
++        "@platforms//cpu:x86_64",
++    ],
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "ios_armv7",
++    constraint_values = [
++        "@platforms//os:ios",
++        "@platforms//cpu:arm",
++    ],
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "ios_arm64",
++    constraint_values = [
++        "@platforms//os:ios",
++        "@platforms//cpu:arm64",
++    ],
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "ios_arm64e",
++    constraint_values = [
++        "@platforms//os:ios",
++        "@platforms//cpu:arm64e",
++    ],
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "windows",
++    constraint_values = [
++        "@platforms//os:windows",
++        "@platforms//cpu:x86_64",
++    ],
++    visibility = ["//visibility:public"],
++)
++
++config_setting(
++    name = "windows_arm64",
++    constraint_values = [
++        "@platforms//os:windows",
++        "@platforms//cpu:arm64",
++    ],
++    visibility = ["//visibility:public"],
++)
 +
 +licenses(["notice"])
 +
-+package(
-+    default_visibility = ["//visibility:public"],
-+)
++package(default_visibility = ["//visibility:public"])
 +
 +cc_library(
 +    name = "language",
@@ -89,10 +309,10 @@ index 000000000..618103e0d
 \ No newline at end of file
 diff --git a/halide.bzl b/halide.bzl
 new file mode 100644
-index 000000000..55d0dad1b
+index 000000000..5bd5b14d4
 --- /dev/null
 +++ b/halide.bzl
-@@ -0,0 +1,25 @@
+@@ -0,0 +1,26 @@
 +"""Bazel build rules for Halide."""
 +
 +load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "use_cpp_toolchain")
@@ -101,6 +321,7 @@ index 000000000..55d0dad1b
 +    _common_opts = [
 +        "-fPIC",
 +        "-frtti",
++        "-std=c++20",
 +        "-Wno-conversion",
 +        "-Wno-sign-compare",
 +    ]
@@ -120,5 +341,5 @@ index 000000000..55d0dad1b
 +    })
 \ No newline at end of file
 -- 
-2.34.1
+2.43.2
 
