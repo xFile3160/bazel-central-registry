@@ -1,4 +1,4 @@
-From 691653a49121b32cc7508622a33cd837319bedf9 Mon Sep 17 00:00:00 2001
+From 462d39ee301790d9b8487d7226ca43d1888b2820 Mon Sep 17 00:00:00 2001
 From: Cesare Mercurio <cesare.mercurio@gmail.com>
 Date: Thu, 4 Apr 2024 16:13:25 -0700
 Subject: [PATCH] JRA-Halide : Add BUILD file
@@ -18,7 +18,7 @@ Smart Commit:
 
 diff --git a/BUILD b/BUILD
 new file mode 100644
-index 000000000..5d05f3268
+index 000000000..2f0835479
 --- /dev/null
 +++ b/BUILD
 @@ -0,0 +1,54 @@
@@ -50,7 +50,7 @@ index 000000000..5d05f3268
 +cc_library(
 +    name = "lib_halide_static",
 +    srcs = select({
-+        ":windows": [
++        "@platforms//os:windows": [
 +            "bin/Release/Halide.dll",
 +            "lib/Release/Halide.lib",
 +        ],

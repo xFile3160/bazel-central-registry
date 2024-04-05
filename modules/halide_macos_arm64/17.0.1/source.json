@@ -2,7 +2,7 @@
     "integrity": "sha256-W/plri52Xzv+uB0q+98Oe3Zo/1bQk6HipyUE4z0ucVs=",
     "patch_strip": 1,
     "patches": {
-        "add_build_file.patch": "sha256-Kn5MXPSYNT1BiiorybcyiZ7F6JRHk44CvI/tQk+utlQ=",
+        "add_build_file.patch": "sha256-7i8SSa86VduW9+NvZOSjfPfuF3cLxeyu++tEsZNr3ZQ=",
         "add_module_dot_bazel.patch": "sha256-Ze3QjTys7Xh3/15kKHIp/36GHxRXPruemJLXumx3oGE="
     },
     "strip_prefix": "Halide-17.0.1-arm-64-osx",
