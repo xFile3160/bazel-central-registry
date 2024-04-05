@@ -3,7 +3,7 @@
     "patch_strip": 1,
     "patches": {
         "add_build_file.patch": "sha256-PfuYyu7jLRfI+GCTA4c0A40lDXSrZLOVLWiDY+x9Ccg=",
-        "add_module_dot_bazel.patch": "sha256-YbId9Z21MbYUj3yT0hmJzM5h/NmcFzHvsvl1WqY3+RY="
+        "add_module_dot_bazel.patch": "sha256-+MT0+tO9oPLGFfkTfzFHsXaybTKYdP3+KI4trZ2D52o="
     },
     "strip_prefix": "Halide-17.0.1-x86-64-linux",
     "url": "https://github.com/halide/Halide/releases/download/v17.0.1/Halide-17.0.1-x86-64-linux-52541176253e74467dabc42eeee63d9a62c199f6.tar.gz"

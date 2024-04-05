@@ -3,7 +3,7 @@
     "patch_strip": 1,
     "patches": {
         "add_build_file.patch": "sha256-PfuYyu7jLRfI+GCTA4c0A40lDXSrZLOVLWiDY+x9Ccg=",
-        "add_module_dot_bazel.patch": "sha256-hak+KDh2YRWmKvHAZoEn/HWiCxXGywo72eA4vUMwiY4="
+        "add_module_dot_bazel.patch": "sha256-eii2VzIAxAGEr+hZMPnj6qWvrPXoAf3ndAcTt80JXcg="
     },
     "strip_prefix": "Halide-17.0.1-arm-64-linux",
     "url": "https://github.com/halide/Halide/releases/download/v17.0.1/Halide-17.0.1-arm-64-linux-52541176253e74467dabc42eeee63d9a62c199f6.tar.gz"
