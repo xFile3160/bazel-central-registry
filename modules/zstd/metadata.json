@@ -3,6 +3,7 @@
     "maintainers": [
         {
             "email": "aaronyu@google.com",
+            "github": "afq984",
             "name": "Li-Yu Yu"
         }
     ],
@@ -12,7 +13,8 @@
     "versions": [
         "1.5.5",
         "1.5.5.bcr.1",
-        "1.5.5.bcr.2"
+        "1.5.5.bcr.2",
+        "1.5.6"
     ],
     "yanked_versions": {}
 }
