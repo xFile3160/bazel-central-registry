@@ -3,3 +3,6 @@ tools/node_modules
 .vscode
 /bazel-*
 MODULE.bazel.lock
+
+# CLion
+/.clwb/
