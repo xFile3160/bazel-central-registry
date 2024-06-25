@@ -3,8 +3,8 @@
     "patch_strip": 1,
     "patches": {
         "cmake_fix_vv.patch": "sha256-EpVo13R44WuwB+69nI3kx5QZdH74n9qKT22hYiXdtmo=",
-        "add_build_file.patch": "sha256-LBEopxbMevEjPDCORg38qB3eMdJ709CPoYVRg9HEEN4=",
-        "add_module_dot_bazel.patch": "sha256-pKnfcIGLzBLQHSupx5q1qZQhKZzjrnx+E6V0amm41mU="
+        "add_build_file.patch": "sha256-+q6E0rL5jwG2G1ST3kG941GWmuLai1ekULwJDLUQNS8=",
+        "add_module_dot_bazel.patch": "sha256-PKWsgSEHuvn1E0wWUlgvAnVxB0IXUwQiY46AhnQUGw0="
     },
     "strip_prefix": "MNN-2.8.0",
     "url": "https://github.com/alibaba/MNN/archive/refs/tags/2.8.0.tar.gz"

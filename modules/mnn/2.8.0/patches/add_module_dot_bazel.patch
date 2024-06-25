@@ -1,28 +1,16 @@
-From 875681f598bc156181fa0a3e619ef9c417b9ebdd Mon Sep 17 00:00:00 2001
-From: Cesare Mercurio <cesare.mercurio@gmail.com>
-Date: Sat, 16 Dec 2023 10:53:21 -0800
-Subject: [PATCH] VVI-mnn-patch : Add bzlmod module file
-
-Summary:
-Makes it compatible with bzlmod integration
-
-Test Plan:
-integration in vvplatform
----
- MODULE.bazel | 3 +++
- 1 file changed, 3 insertions(+)
- create mode 100644 MODULE.bazel
-
-diff --git a/MODULE.bazel b/MODULE.bazel
-new file mode 100644
-index 00000000..eaf6d201
 --- /dev/null
 +++ b/MODULE.bazel
-@@ -0,0 +1,3 @@
-+module(name = "mnn", version = "2.8.0")
+@@ -0,0 +1,12 @@
++"""Module MNN tbzlmod dependency."""
++
++module(
++    name = "mnn",
++    version = "2.8.0",
++    compatibility_level = 1,
++)
 +
 +bazel_dep(name = "rules_cc", version = "0.0.9")
++
++# to make sha256 work do this:
++# openssl dgst -sha256 -binary <file> | openssl base64 -A | sed 's/^/sha256-/'
 \ No newline at end of file
--- 
-2.34.1
-
