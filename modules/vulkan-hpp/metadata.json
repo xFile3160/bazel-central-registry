@@ -1,0 +1,11 @@
+{
+    "homepage": "https://github.com/KhronosGroup/Vulkan-Hpp",
+    "maintainers": [],
+    "repository": [
+        "github:KhronosGroup/Vulkan-Hpp"
+    ],
+    "versions": [
+        "1.3.283"
+    ],
+    "yanked_versions": {}
+}

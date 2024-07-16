@@ -1,0 +1,14 @@
+--- /dev/null
++++ b/BUILD
+@@ -0,0 +1,11 @@
++load("@rules_cc//cc:defs.bzl", "cc_library")
++package(default_visibility = ["//visibility:public"])
++cc_library(
++    name = "vulkan-hpp",
++    hdrs = glob([
++        "vulkan/*.h",
++        "vulkan/*.hpp",
++    ]),
++    includes = ["."],
++    visibility = ["//visibility:public"],
++)
