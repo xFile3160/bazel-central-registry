@@ -1,0 +1,10 @@
+{
+    "integrity": "sha256-jkkeL5rHwThIK7NEyykccIYycY3+4d1/nDdJs2B+Qcc=",
+    "patch_strip": 1,
+    "patches": {
+        "add_build_file.patch": "sha256-7i8SSa86VduW9+NvZOSjfPfuF3cLxeyu++tEsZNr3ZQ=",
+        "add_module_dot_bazel.patch": "sha256-dS0SeS5ddjvBCyFNUucFnNegBX9vrSPUh2K8TM26ao8="
+    },
+    "strip_prefix": "Halide-18.0.0-x86-64-linux",
+    "url": "https://github.com/halide/Halide/releases/download/v18.0.0/Halide-18.0.0-x86-64-linux-8c651b459a4e3744b413c23a29b5c5d968702bb7.tar.gz"
+}
