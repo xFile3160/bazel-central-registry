@@ -1,5 +1,5 @@
 --- /dev/null
-+++ b/MODULE.bazel
++++ MODULE.bazel
 @@ -0,0 +1,6 @@
 +module(
 +    name = "vulkan-hpp",
