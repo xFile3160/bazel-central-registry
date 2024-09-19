@@ -1,4 +1,0 @@
-platforms:
-  windows:
-    build_targets:
-    - '@halide_windows_arm64//:halide_windows_arm64'
