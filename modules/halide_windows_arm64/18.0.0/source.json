@@ -1,0 +1,10 @@
+{
+    "integrity": "sha256-lVaj/BboOeFBvZXZBq9XbPOvDZbNFlwHXoE0FaMabWM=",
+    "patch_strip": 1,
+    "patches": {
+        "add_build_file.patch": "sha256-7i8SSa86VduW9+NvZOSjfPfuF3cLxeyu++tEsZNr3ZQ=",
+        "add_module_dot_bazel.patch": "sha256-Dr/730Benf6bUoh/S5q2PxfOA18xBq0ZYqxot4pgFDM="
+    },
+    "strip_prefix": "Halide-windows-arm64",
+    "url": "https://github.com/xFile3160/halide-windows-arm64/releases/download/v18.0.0/Halide-windows-arm64.zip"
+}
