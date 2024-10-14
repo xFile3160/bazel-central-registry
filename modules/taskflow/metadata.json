@@ -1,0 +1,11 @@
+{
+    "homepage": "https://github.com/taskflow/taskflow",
+    "maintainers": [],
+    "repository": [
+        "github:taskflow/taskflow"
+    ],
+    "versions": [
+        "3.8.0"
+    ],
+    "yanked_versions": {}
+}
