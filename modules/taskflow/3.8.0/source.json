@@ -2,7 +2,7 @@
     "integrity": "sha256-YWNEjN+AP7hjsXMiLd5WsAC5hbmp6q4EN+qHdbUpIhk=",
     "patch_strip": 1,
     "patches": {
-        "add_build_file.patch": "sha256-FF7bTScOGVii9dMe004CXbm5OEZoUPF6S1jVJn3pvpQ=",
+        "add_build_file.patch": "sha256-xInaGA0UWFwJnXDrm6DHm/6MCXVO/NH488fnMp5Ie68=",
         "add_module_dot_bazel.patch": "sha256-0btisL2x6Mfw0p3PE7O5D2ppTRmpja/M0b+Q2/agMiw="
     },
     "strip_prefix": "taskflow-3.8.0",
