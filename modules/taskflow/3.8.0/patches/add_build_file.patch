@@ -1,6 +1,6 @@
 --- /dev/null
 +++ b/BUILD
-@@ -0,0 +1,17 @@
+@@ -0,0 +1,16 @@
 +load("@rules_cc//cc:defs.bzl", "cc_library")
 +
 +package(default_visibility = ["//visibility:public"])
