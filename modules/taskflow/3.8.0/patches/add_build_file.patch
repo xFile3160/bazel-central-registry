@@ -13,8 +13,7 @@
 +
 +cc_library(
 +    name = "taskflow",
-+    srcs = ["@taskflow//:all_srcs"],
-+    hdrs = ["taskflow/taskflow.hpp"],
++    hdrs = ["@taskflow//:all_srcs"],
 +    includes = ["taskflow"],
 +    visibility = ["//visibility:public"],
 +)
