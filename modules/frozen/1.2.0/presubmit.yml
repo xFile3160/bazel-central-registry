@@ -1,0 +1,16 @@
+platforms:
+  centos7:
+    build_targets:
+    - '@frozen//:frozen'
+  debian10:
+    build_targets:
+    - '@frozen//:frozen'
+  macos:
+    build_targets:
+    - '@frozen//:frozen'
+  ubuntu2004:
+    build_targets:
+    - '@frozen//:frozen'
+  windows:
+    build_targets:
+    - '@frozen//:frozen'
