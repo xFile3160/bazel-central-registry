@@ -1,0 +1,10 @@
+{
+    "integrity": "sha256-MWB6I2/msgpL5OAFa72lABpsWt1elYkZd8myGmnS27c=",
+    "patch_strip": 1,
+    "patches": {
+        "add_build_file.patch": "sha256-a8Ne7iB8HMvk9mo7AZ0abCbe25T+BjGPCf6j+NAldw4=",
+        "add_module_dot_bazel.patch": "sha256-te9SJ8iz9tWEhwnbxUzVJzmQgeJm894NL0UjAsGdGK0="
+    },
+    "strip_prefix": "Halide-19.0.0-x86-64-osx",
+    "url": "https://github.com/halide/Halide/releases/download/v19.0.0/Halide-19.0.0-x86-64-osx-5f17d6f8a35e7d374ef2e7e6b2d90061c0530333.tar.gz"
+}
