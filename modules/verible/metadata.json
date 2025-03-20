@@ -11,7 +11,9 @@
         "github:chipsalliance/verible"
     ],
     "versions": [
-        "0.0.3892"
+        "0.0.3892",
+        "0.0.3920",
+        "0.0.3933"
     ],
     "yanked_versions": {}
 }

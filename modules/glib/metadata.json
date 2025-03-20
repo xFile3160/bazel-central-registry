@@ -7,9 +7,12 @@
             "name": "John Millikin"
         }
     ],
-    "repository": [],
+    "repository": [
+        "https://download.gnome.org/sources/glib"
+    ],
     "versions": [
-        "2.82.2"
+        "2.82.2",
+        "2.82.2.bcr.1"
     ],
     "yanked_versions": {}
 }

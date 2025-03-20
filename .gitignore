@@ -3,6 +3,7 @@ tools/node_modules
 .vscode
 /bazel-*
 MODULE.bazel.lock
+temp_test_repos
 
 # CLion
 /.clwb/
