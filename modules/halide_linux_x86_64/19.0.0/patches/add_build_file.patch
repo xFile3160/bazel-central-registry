@@ -21,7 +21,8 @@ new file mode 100644
 index 000000000..2f0835479
 --- /dev/null
 +++ b/BUILD
-@@ -0,0 +1,69 @@
+@@ -0,0 +1,62 @@
++load("@rules_cc//cc:defs.bzl", "cc_library")
 +load(":halide.bzl", "halide_language_copts")
 +
 +licenses(["notice"])
@@ -70,25 +71,17 @@ index 000000000..2f0835479
 +        "include",
 +        "share/Halide/tools",
 +    ],
++    linkopts = select({
++        "@platforms//os:macos": [
++            "-Wl,-force_load,$(location lib/libHalide_GenGen.a)",
++        ],
++        "//conditions:default": [],
++    }),
 +    visibility = ["//visibility:public"],
 +    deps = [
 +        ":language",
 +        ":lib_halide_static",
 +    ],
-+    linkopts = select({
-+        "@platforms//os:windows": [
-+            # If Windows static lib exists, adjust accordingly
-+            "/WHOLEARCHIVE:Halide_GenGen.lib",
-+        ],
-+        "@platforms//os:macos": [
-+            "-Wl,-force_load,$(location lib/libHalide_GenGen.a)",
-+        ],
-+        "//conditions:default": [
-+            "-Wl,--whole-archive",
-+            "-l:libHalide_GenGen.a",
-+            "-Wl,--no-whole-archive",
-+        ],
-+    }),
 +    alwayslink = True,
 +)
 \ No newline at end of file
