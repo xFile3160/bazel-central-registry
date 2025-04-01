@@ -16,7 +16,10 @@
         "github:boostorg/beast"
     ],
     "versions": [
-        "1.83.0"
+        "1.83.0",
+        "1.83.0.bcr.1",
+        "1.87.0",
+        "1.87.0.bcr.1"
     ],
     "yanked_versions": {}
 }

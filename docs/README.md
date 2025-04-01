@@ -30,7 +30,7 @@ cd bazel-central-registry
 bazel run //tools:add_module
 ```
 
-The script will generate all require changes based on your input, please review, modify and commit the change, then send a PR to the BCR repository.
+The script will generate all required changes based on your input, please review, modify and commit the change, then send a PR to the BCR repository.
 
 If you are the project owner, you can set up the [Publish to BCR](https://github.com/apps/publish-to-bcr) Github App for your repository to automatically send a PR to the BCR when cutting a new release.
 
@@ -40,7 +40,7 @@ The tool also accepts a `--version` option to update the `source.json` of a spec
 ### Testing your change locally
 
 1. Clone BCR locally with `git clone git@github.com:bazelbuild/bazel-central-registry.git`
-2. Make the changes you want by to BCR. Make use of `bazel run //tools:add_module` and `bazel run //tools:update_integrity` etc.
+2. Make the changes you want to BCR. Make use of `bazel run //tools:add_module` and `bazel run //tools:update_integrity` etc.
 3. Update your `MODULE.bazel` file in your repository you want to use the change made in step 2.
 4. To test the changes, in your own repo that consumes the BCR Module you added, run:
 
