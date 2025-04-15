@@ -3,7 +3,7 @@
     "patch_strip": 1,
     "patches": {
         "add_build_file.patch": "sha256-NAiPeISwac+dVcms6mfD+ehdSklWjjWXxHN8lrNpj9g=",
-        "add_module_dot_bazel.patch": "sha256-iA1Y0AeYJo0HNR2kCQpcUnqeTVE8875CyJEp1WciibU="
+        "add_module_dot_bazel.patch": "sha256-I3xnUjwooHLNZG/4dhl+8MRqnaj7GyT0CVpAkDuOfbo="
     },
     "strip_prefix": "Halide-19.0.0-arm-64-linux",
     "url": "https://github.com/halide/Halide/releases/download/v19.0.0/Halide-19.0.0-arm-64-linux-5f17d6f8a35e7d374ef2e7e6b2d90061c0530333.tar.gz"
