@@ -21,7 +21,7 @@ new file mode 100644
 index 000000000..2f0835479
 --- /dev/null
 +++ b/BUILD
-@@ -0,0 +1,62 @@
+@@ -0,0 +1,63 @@
 +load("@rules_cc//cc:defs.bzl", "cc_library")
 +load(":halide.bzl", "halide_language_copts")
 +
@@ -64,9 +64,10 @@ index 000000000..2f0835479
 +
 +cc_library(
 +    name = "gengen",
-+    srcs = [
-+        "lib/libHalide_GenGen.a",
-+    ],
++    srcs = select({
++        "@platforms//os:windows": ["lib/Release/Halide_GenGen.lib",],
++        "//conditions:default":    ["lib/libHalide_GenGen.a",],
++    }),
 +    includes = [
 +        "include",
 +        "share/Halide/tools",
