@@ -345,22 +345,40 @@ class BcrValidator:
             self.report(BcrValidationResult.GOOD, "The source URL doesn't look unstable.")
 
     def verify_source_archive_url_integrity(self, module_name, version):
-        """Verify the integrity value of the URL is correct."""
-        if self.registry.get_source(module_name, version).get("type", None) == "git_repository":
+        """Verify the integrity value of the URL and mirror URLs is correct."""
+        source = self.registry.get_source(module_name, version)
+        if source.get("type", None) == "git_repository":
             return
-        source_url = self.registry.get_source(module_name, version)["url"]
-        expected_integrity = self.registry.get_source(module_name, version)["integrity"]
-        real_integrity = integrity_for_comparison(download(source_url), expected_integrity)
-        if real_integrity != expected_integrity:
-            self.report(
-                BcrValidationResult.FAILED,
-                f"{module_name}@{version}'s source archive `{source_url}` has expected integrity value "
-                f"`{expected_integrity}`, but the real integrity value is `{real_integrity}`!",
-            )
-        else:
+
+        expected_integrity = source["integrity"]
+        urls_to_check = [(source["url"], "main source archive URL")]
+
+        mirror_urls = source.get("mirror_urls", [])
+        for i, mirror_url in enumerate(mirror_urls):
+            urls_to_check.append((mirror_url, f"mirror URL #{i+1}"))
+
+        all_good = True
+        for url, description in urls_to_check:
+            try:
+                real_integrity = integrity_for_comparison(download(url), expected_integrity)
+                if real_integrity != expected_integrity:
+                    self.report(
+                        BcrValidationResult.FAILED,
+                        f"{module_name}@{version}'s {description} `{url}` has expected integrity value "
+                        f"`{expected_integrity}`, but the real integrity value is `{real_integrity}`!",
+                    )
+                    all_good = False
+            except Exception as e:
+                self.report(
+                    BcrValidationResult.FAILED,
+                    f"Failed to download or verify integrity for {description} `{url}` of {module_name}@{version}: {e}",
+                )
+                all_good = False
+
+        if all_good:
             self.report(
                 BcrValidationResult.GOOD,
-                "The source archive's integrity value matches.",
+                "The source archive's integrity value matches all provided URLs.",
             )
 
     def verify_git_repo_source_stability(self, module_name, version):
@@ -461,7 +479,22 @@ class BcrValidator:
         run_git("-C", output_dir, "fetch", "--depth=1", "origin", source["commit"])
         run_git("-C", output_dir, "checkout", source["commit"])
 
-    def verify_module_dot_bazel(self, module_name, version):
+    @staticmethod
+    def extract_attribute_from_module(module_dot_bazel_file, attribute, default=None):
+        """Extract the value of the given attribute from `module()` call in the MODULE.bazel file content"""
+        with open(module_dot_bazel_file, "r") as file:
+            tree = ast.parse(file.read(), filename=module_dot_bazel_file)
+            for node in tree.body:
+                if (
+                    isinstance(node, ast.Expr)
+                    and isinstance(node.value, ast.Call)
+                    and isinstance(node.value.func, ast.Name)
+                    and node.value.func.id == "module"
+                ):
+                    keywords = {k.arg: k.value.value for k in node.value.keywords if isinstance(k.value, ast.Constant)}
+                    return keywords.get(attribute, default)
+
+    def verify_module_dot_bazel(self, module_name, version, check_compatibility_level=True):
         source = self.registry.get_source(module_name, version)
         tmp_dir = Path(tempfile.mkdtemp())
         output_dir = tmp_dir.joinpath("source_root")
@@ -545,9 +578,8 @@ class BcrValidator:
             source_module_dot_bazel_content = open(source_module_dot_bazel, "r").readlines()
         else:
             source_module_dot_bazel_content = []
-        bcr_module_dot_bazel_content = open(
-            self.registry.get_module_dot_bazel_path(module_name, version), "r"
-        ).readlines()
+        bcr_module_dot_bazel = self.registry.get_module_dot_bazel_path(module_name, version)
+        bcr_module_dot_bazel_content = open(bcr_module_dot_bazel, "r").readlines()
         source_module_dot_bazel_content = fix_line_endings(source_module_dot_bazel_content)
         bcr_module_dot_bazel_content = fix_line_endings(bcr_module_dot_bazel_content)
         file_name = "a/" * int(source.get("patch_strip", 0)) + "MODULE.bazel"
@@ -573,20 +605,32 @@ class BcrValidator:
         else:
             self.report(BcrValidationResult.GOOD, "Checked in MODULE.bazel matches the sources.")
 
-        tree = ast.parse("".join(bcr_module_dot_bazel_content), filename=source_root)
-        for node in tree.body:
-            if (
-                isinstance(node, ast.Expr)
-                and isinstance(node.value, ast.Call)
-                and isinstance(node.value.func, ast.Name)
-                and node.value.func.id == "module"
-            ):
-                keywords = {k.arg: k.value.value for k in node.value.keywords if isinstance(k.value, ast.Constant)}
-                if keywords.get("version", version) != version:
-                    self.report(
-                        BcrValidationResult.FAILED,
-                        "Checked in MODULE.bazel version does not match the version of the module directory added.",
-                    )
+        # Check the version in MODULE.bazel matches the version in directory name
+        version_in_module_dot_bazel = BcrValidator.extract_attribute_from_module(bcr_module_dot_bazel, "version")
+        if version_in_module_dot_bazel != version:
+            self.report(
+                BcrValidationResult.FAILED,
+                "Checked in MODULE.bazel version does not match the version of the module directory added.",
+            )
+
+        # Check the compatibility_level in MODULE.bazel matches the previous version
+        versions = self.registry.get_metadata(module_name)["versions"]
+        versions.sort(key=Version)
+        index = versions.index(version)
+        if check_compatibility_level and index > 0:
+            pre_version = versions[index - 1]
+            previous_module_dot_bazel = self.registry.get_module_dot_bazel_path(module_name, pre_version)
+            current_compatibility_level = BcrValidator.extract_attribute_from_module(
+                bcr_module_dot_bazel, "compatibility_level", 0
+            )
+            previous_compatibility_level = BcrValidator.extract_attribute_from_module(
+                previous_module_dot_bazel, "compatibility_level", 0
+            )
+            if current_compatibility_level != previous_compatibility_level:
+                self.report(
+                    BcrValidationResult.FAILED,
+                    f"The compatibility_level in the new module version ({current_compatibility_level}) doesn't match the previous version ({previous_compatibility_level}). ",
+                )
 
         shutil.rmtree(tmp_dir)
 
@@ -659,7 +703,7 @@ class BcrValidator:
         if "presubmit_yml" not in skipped_validations:
             self.verify_presubmit_yml_change(module_name, version)
         self.validate_presubmit_yml(module_name, version)
-        self.verify_module_dot_bazel(module_name, version)
+        self.verify_module_dot_bazel(module_name, version, "compatibility_level" not in skipped_validations)
         self.verify_attestations(module_name, version)
 
     def validate_metadata(self, modules):
