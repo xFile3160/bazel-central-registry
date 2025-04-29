@@ -21,8 +21,8 @@ new file mode 100644
 index 000000000..2f0835479
 --- /dev/null
 +++ b/BUILD
-@@ -0,0 +1,63 @@
-+load("@rules_cc//cc:defs.bzl", "cc_library")
+@@ -0,0 +1,78 @@
++load("@rules_cc//cc:defs.bzl", "cc_library", "cc_import")
 +load(":halide.bzl", "halide_language_copts")
 +
 +licenses(["notice"])
@@ -48,16 +48,31 @@ index 000000000..2f0835479
 +    includes = ["include"],
 +)
 +
++cc_import(
++    name = "halide_windows_dll",
++    shared_library = "bin/Release/Halide.dll",
++    visibility = ["//visibility:public"],
++)
++
++filegroup(
++    name = "halide_runtime_dll",
++    srcs = ["bin/Release/Halide.dll"],
++    visibility = ["//visibility:public"],
++)
++
 +cc_library(
 +    name = "lib_halide_static",
 +    srcs = select({
 +        "@platforms//os:windows": [
-+            "bin/Release/Halide.dll",
 +            "lib/Release/Halide.lib",
 +        ],
 +        "//conditions:default": [
 +            "lib/libHalide.a",
 +        ],
++    }),
++    deps = select({
++       "@platforms//os:windows": [":halide_windows_dll"],
++       "//conditions:default": [],
 +    }),
 +    visibility = ["//visibility:public"],
 +)
