@@ -2,7 +2,7 @@
     "integrity": "sha256-RqF9Pqcf4lgKf0PKfaKGxbkQbddh4v1VM7sRPl2GtjM=",
     "patch_strip": 1,
     "patches": {
-        "add_build_file.patch": "sha256-Lha+tJb0aqaL/3R9SBKbmWkMSs9fwtvuZaeL9N+ktwY=",
+        "add_build_file.patch": "sha256-a23O30nQvPD+hpw5Psn9mdjNInkr2slYKlg6p7oIbZ0=",
         "add_module_dot_bazel.patch": "sha256-qzbR+fjS3k1Gtom2kHdWx0RGvwwanmMMqHGNB4+l70Y="
     },
     "strip_prefix": "SDL3-3.2.14",
