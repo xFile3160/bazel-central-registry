@@ -17,6 +17,6 @@
 +    hdrs = glob([
 +        "include/SDL3/*.h",
 +    ]),
-+    includes = ["include/SDL3"],
++    includes = ["include"],
 +    visibility = ["//visibility:public"],
 +)
