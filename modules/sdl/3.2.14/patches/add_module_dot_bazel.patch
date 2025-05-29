@@ -1,0 +1,14 @@
+--- /dev/null
++++ b/MODULE.bazel
+@@ -0,0 +1,12 @@
++"""Module SDL3 bzlmod dependency."""
++
++module(
++    name = "sdl3",
++    version = "3.2.14",
++    compatibility_level = 1,
++)
++
++bazel_dep(name = "rules_cc", version = "0.0.9")
++
++# For SHA256: openssl dgst -sha256 -binary <file> | openssl base64 -A | sed 's/^/sha256-/'
