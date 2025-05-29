@@ -1,6 +1,6 @@
 --- /dev/null
 +++ b/MODULE.bazel
-@@ -0,0 +1,8 @@
+@@ -0,0 +1,9 @@
 +"""Module SDL3 bzlmod dependency."""
 +
 +module(
