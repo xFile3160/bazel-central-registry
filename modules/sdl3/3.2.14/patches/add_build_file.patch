@@ -1,6 +1,6 @@
 --- /dev/null
 +++ b/BUILD
-@@ -0,0 +1,20 @@
+@@ -0,0 +1,19 @@
 +load("@rules_cc//cc:defs.bzl", "cc_library")
 +
 +package(default_visibility = ["//visibility:public"])
@@ -16,7 +16,6 @@
 +    name = "sdl3_headers",
 +    hdrs = glob([
 +        "include/SDL3/*.h",
-+        "include/SDL3/*.hpp",
 +    ]),
 +    includes = ["include/SDL3"],
 +    visibility = ["//visibility:public"],
