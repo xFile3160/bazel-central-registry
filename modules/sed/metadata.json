@@ -12,7 +12,9 @@
         "https://ftp.gnu.org/gnu/sed/"
     ],
     "versions": [
-        "4.9"
+        "4.9",
+        "4.9.bcr.1",
+        "4.9.bcr.2"
     ],
     "yanked_versions": {}
 }
