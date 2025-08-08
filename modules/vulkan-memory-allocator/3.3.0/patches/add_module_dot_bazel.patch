@@ -1,0 +1,31 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Cesare Mercurio <cesare.mercurio@gmail.com>
+Date: Thu, 8 Aug 2025 00:00:00 -0800
+Subject: [PATCH 2/2] Add MODULE.bazel for Vulkan Memory Allocator
+
+Summary:
+Adds MODULE.bazel file for bzlmod support
+
+Test Plan:
+Integration with cromatica project
+---
+ MODULE.bazel | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+ create mode 100644 MODULE.bazel
+
+diff --git a/MODULE.bazel b/MODULE.bazel
+new file mode 100644
+index 0000000..0000000
+--- /dev/null
++++ b/MODULE.bazel
+@@ -0,0 +1,8 @@
++"""Module vulkan-memory-allocator bzlmod dependency."""
++
++module(
++    name = "vulkan-memory-allocator",
++    version = "3.3.0",
++)
++
++bazel_dep(name = "rules_cc", version = "0.0.1")
+-- 
+2.34.1

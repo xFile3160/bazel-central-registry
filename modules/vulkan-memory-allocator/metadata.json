@@ -1,0 +1,17 @@
+{
+    "homepage": "https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator",
+    "maintainers": [
+        {
+            "email": "cesare.mercurio@gmail.com",
+            "github": "cesaremercurio",
+            "name": "Cesare Mercurio"
+        }
+    ],
+    "repository": [
+        "github:GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator"
+    ],
+    "versions": [
+        "3.3.0"
+    ],
+    "yanked_versions": {}
+}

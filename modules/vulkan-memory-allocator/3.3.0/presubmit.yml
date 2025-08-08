@@ -1,0 +1,16 @@
+platforms:
+  centos7:
+    build_targets:
+    - '@vulkan-memory-allocator//:vulkan_memory_allocator'
+  debian10:
+    build_targets:
+    - '@vulkan-memory-allocator//:vulkan_memory_allocator'
+  macos:
+    build_targets:
+    - '@vulkan-memory-allocator//:vulkan_memory_allocator'
+  ubuntu2004:
+    build_targets:
+    - '@vulkan-memory-allocator//:vulkan_memory_allocator'
+  windows:
+    build_targets:
+    - '@vulkan-memory-allocator//:vulkan_memory_allocator'

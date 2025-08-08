@@ -1,0 +1,2 @@
+# Marker file for Vulkan Memory Allocator module
+workspace(name = "vulkan-memory-allocator")

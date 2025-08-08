@@ -1,0 +1,10 @@
+{
+    "integrity": "sha256-xPa75rWkXC62EMqdIxFY4xMIbVsaQMmSLLQrWXQZsU4=",
+    "patch_strip": 1,
+    "patches": {
+        "add_build_file.patch": "sha256-c13GA2kitlvW1uhln0QeGC0eFH0ASb5h8Bv90lpQ3N8=",
+        "add_module_dot_bazel.patch": "sha256-z4jeIhFGmiwRiI8PxkLyJXNdZxommFExwpbhWydO/fE="
+    },
+    "strip_prefix": "VulkanMemoryAllocator-3.3.0",
+    "url": "https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator/archive/refs/tags/v3.3.0.tar.gz"
+}
