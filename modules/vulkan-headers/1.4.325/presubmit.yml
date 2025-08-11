@@ -1,0 +1,17 @@
+bcr_test_module:
+  module_path: .
+  matrix:
+    platform:
+      - ubuntu2404
+      - macos
+      - windows
+    bazel:
+      - 7.x
+      - 8.x
+  tasks:
+    run_tests:
+      name: "Run tests"
+      platform: ${{ platform }}
+      bazel: ${{ bazel }}
+      test_targets:
+        - "@vulkan-headers//:all"

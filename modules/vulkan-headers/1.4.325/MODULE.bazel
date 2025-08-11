@@ -1,0 +1,8 @@
+"""Module vulkan-headers bzlmod dependency."""
+
+module(
+    name = "vulkan-headers",
+    version = "1.4.325",
+    compatibility_level = 1,
+)
+bazel_dep(name = "rules_cc", version = "0.0.1")
