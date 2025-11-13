@@ -1,0 +1,11 @@
+"""Module halide_macos_arm64 to modularize the dependencies from halide windows version."""
+
+module(
+    name = "halide_macos_arm64",
+    version = "21.0.0",
+    compatibility_level = 1,
+)
+
+bazel_dep(name = "bazel_skylib", version = "1.4.2")
+bazel_dep(name = "platforms", version = "0.0.8")
+bazel_dep(name = "rules_cc", version = "0.0.9")

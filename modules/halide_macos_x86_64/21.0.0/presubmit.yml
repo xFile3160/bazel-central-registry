@@ -1,0 +1,4 @@
+platforms:
+  ubuntu2204:
+    build_targets:
+    - '@halide_macos_x86_64//:halide_macos_x86_64'

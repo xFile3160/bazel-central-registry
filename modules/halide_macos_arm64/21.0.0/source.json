@@ -1,0 +1,10 @@
+{
+    "integrity": "sha256-BApvveW6Jkhw30l1E4QXzi/yyOneVQMCyLF/NsNuWvo=",
+    "patch_strip": 1,
+    "patches": {
+        "add_build_file.patch": "sha256-NAiPeISwac+dVcms6mfD+ehdSklWjjWXxHN8lrNpj9g=",
+        "add_module_dot_bazel.patch": "sha256-3R04HpSQYzUYyZlasdgC+eA+PZxrbXbFmKL3AotF38E="
+    },
+    "strip_prefix": "Halide-21.0.0-arm-64-osx",
+    "url": "https://github.com/halide/Halide/releases/download/v21.0.0/Halide-21.0.0-arm-64-osx-b629c80de18f1534ec71fddd8b567aa7027a0876.tar.gz"
+}

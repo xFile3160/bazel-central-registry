@@ -1,0 +1,137 @@
+From 462d39ee301790d9b8487d7226ca43d1888b2820 Mon Sep 17 00:00:00 2001
+From: Cesare Mercurio <cesare.mercurio@gmail.com>
+Date: Thu, 4 Apr 2024 16:13:25 -0700
+Subject: [PATCH] JRA-Halide : Add BUILD file
+
+Summary:
+Adds BUILD bazel file
+
+Test Plan:
+
+Smart Commit:
+---
+ BUILD      | 54 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ halide.bzl | 25 +++++++++++++++++++++++++
+ 2 files changed, 79 insertions(+)
+ create mode 100644 BUILD
+ create mode 100644 halide.bzl
+
+diff --git a/BUILD b/BUILD
+new file mode 100644
+index 000000000..2f0835479
+--- /dev/null
++++ b/BUILD
+@@ -0,0 +1,78 @@
++load("@rules_cc//cc:defs.bzl", "cc_library", "cc_import")
++load(":halide.bzl", "halide_language_copts")
++
++licenses(["notice"])
++
++package(default_visibility = ["//visibility:public"])
++
++cc_library(
++    name = "language",
++    hdrs = ["include/Halide.h"],
++    copts = halide_language_copts(),
++    includes = ["include"],
++    deps = [
++        ":runtime",
++    ],
++)
++
++cc_library(
++    name = "runtime",
++    hdrs = glob([
++        "include/HalideRuntime*.h",
++        "include/HalideBuffer*.h",
++    ]),
++    includes = ["include"],
++)
++
++cc_import(
++    name = "halide_windows_dll",
++    shared_library = "bin/Release/Halide.dll",
++    visibility = ["//visibility:public"],
++)
++
++filegroup(
++    name = "halide_runtime_dll",
++    srcs = ["bin/Release/Halide.dll"],
++    visibility = ["//visibility:public"],
++)
++
++cc_library(
++    name = "lib_halide_static",
++    srcs = select({
++        "@platforms//os:windows": [
++            "lib/Release/Halide.lib",
++        ],
++        "//conditions:default": [
++            "lib/libHalide.a",
++        ],
++    }),
++    deps = select({
++       "@platforms//os:windows": [":halide_windows_dll"],
++       "//conditions:default": [],
++    }),
++    visibility = ["//visibility:public"],
++)
++
++cc_library(
++    name = "gengen",
++    srcs = select({
++        "@platforms//os:windows": ["lib/Release/Halide_GenGen.lib",],
++        "//conditions:default":    ["lib/libHalide_GenGen.a",],
++    }),
++    includes = [
++        "include",
++        "share/Halide/tools",
++    ],
++    linkopts = select({
++        "@platforms//os:macos": [
++            "-Wl,-force_load,$(location lib/libHalide_GenGen.a)",
++        ],
++        "//conditions:default": [],
++    }),
++    visibility = ["//visibility:public"],
++    deps = [
++        ":language",
++        ":lib_halide_static",
++    ],
++    alwayslink = True,
++)
+\ No newline at end of file
+diff --git a/halide.bzl b/halide.bzl
+new file mode 100644
+index 000000000..3d8164be7
+--- /dev/null
++++ b/halide.bzl
+@@ -0,0 +1,25 @@
++"""Bazel build rules for Halide."""
++load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "use_cpp_toolchain")
++
++def halide_language_copts():
++    _common_opts = [
++        "-fPIC",
++        "-frtti",
++        "-std=c++20",
++        "-Wno-conversion",
++        "-Wno-sign-compare",
++    ]
++    _posix_opts = [
++        "$(STACK_FRAME_UNLIMITED)",
++        "-fno-exceptions",
++        "-funwind-tables",
++        "-fvisibility-inlines-hidden",
++    ]
++    _msvc_opts = [
++        "-D_CRT_SECURE_NO_WARNINGS",
++        "/MD",
++    ]
++    return _common_opts + select({
++        "//conditions:default": _posix_opts,
++        "@platforms//os:windows": _msvc_opts,
++    })
+-- 
+2.43.2
+
