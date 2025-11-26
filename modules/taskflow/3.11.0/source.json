@@ -1,0 +1,10 @@
+{
+    "integrity": "sha256-zXvqYcPDpu17pgat0vjcn5gd2xw2122IJOGtoNpjxjQ=",
+    "patch_strip": 1,
+    "patches": {
+        "add_build_file.patch": "sha256-B8X2/EcI3pZtHETEsg8jF3lJ2CZE/7mXX/4nwT8SpU0=",
+        "add_module_dot_bazel.patch": "sha256-M2cC4ou+dpeRBDumSauCiP2sIezXQljyefpWrLQPAkQ="
+    },
+    "strip_prefix": "taskflow-3.11.0",
+    "url": "https://github.com/taskflow/taskflow/archive/refs/tags/v3.11.0.zip"
+}

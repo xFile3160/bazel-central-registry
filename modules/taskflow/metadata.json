@@ -5,6 +5,7 @@
         "github:taskflow/taskflow"
     ],
     "versions": [
+        "3.11.0",
         "3.8.0"
     ],
     "yanked_versions": {}
