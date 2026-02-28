@@ -1,6 +1,6 @@
 module(
-    name = "imgui",
-    version = "6.6.6.6.7",
+    name = "imgui_cromatica",
+    version = "6.6.6.6.6",
     bazel_compatibility = [">=7.2.1"],
     compatibility_level = 0,
 )

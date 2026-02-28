@@ -1,0 +1,19 @@
+{
+    "homepage": "https://github.com/ocornut/imgui",
+    "maintainers": [
+        {
+            "email": "cesare.mercurio@gmail.com",
+            "github": "xFile3160",
+            "github_user_id": 9123023,
+            "name": "Cesare Mercurio"
+        }
+    ],
+    "repository": [
+        "github:ocornut/imgui"
+    ],
+    "versions": [
+        "6.6.6.6.6",
+        "6.6.6.6.7"
+    ],
+    "yanked_versions": {}
+}

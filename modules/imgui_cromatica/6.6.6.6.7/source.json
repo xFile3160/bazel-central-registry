@@ -1,18 +1,18 @@
 {
-    "integrity": "sha256-mUqteFoKpXJTjZCbkjvwpk57/lqzNg2K4OOXxrsxLAQ=",
-    "strip_prefix": "imgui-1.92.2",
-    "url": "https://github.com/ocornut/imgui/archive/refs/tags/v1.92.2.tar.gz",
+    "integrity": "sha256-7X+HbHalJ8P1xIjozX4bV89dpf4QZcNarUpwbQdZzYI=",
+    "strip_prefix": "imgui-docking",
+    "url": "https://github.com/ocornut/imgui/archive/refs/heads/docking.tar.gz",
     "patch_strip": 1,
     "patches": {},
     "overlay": {
         "backends/BUILD.bazel": "sha256-XE24iI5dSkEmgUxj/BSrsJSW6ft8zO9cz4Z1EC60mD4=",
-        "BUILD.bazel": "sha256-viwU8MmlMSigK0DcVL5kK6eTwXpljiP8jk9GDrtmF8g=",
+        "BUILD.bazel": "sha256-MThHCbsS012MUOV4+WFye921bGoPT/gB/09yM6YkxPc=",
         "examples/example_glfw_opengl3/BUILD.bazel": "sha256-wTdD4nkg3rvQmg3bPjU2GJTsw5Lry9GYN/mnxMzZe8E=",
         "examples/example_win32_directx10/BUILD.bazel": "sha256-DaG4vRl9qrZq4U4sWEUNM1fq6Ws4Ey8uBT/EyhlWDTE=",
         "examples/example_win32_directx11/BUILD.bazel": "sha256-M9ws7BtFRjWtgJR9uc+stezYOqTNUhIWUUytUiEEAJQ=",
         "examples/example_win32_directx12/BUILD.bazel": "sha256-Z+2SJGxHEVE78bdTh0FCAcdzr+42/hXzHev1WoBAVcs=",
         "examples/example_win32_directx9/BUILD.bazel": "sha256-LzJiJDgzJFY/ZPQraDEo5es/w+zZW2Jwm7JgKBXOg2M=",
         "examples/example_win32_opengl3/BUILD.bazel": "sha256-9tzKuBS9mclm/vZiJYesPmCt14lGIihD84lJVOm2QS8=",
-        "MODULE.bazel": "sha256-bIge/QIfFrlyg1MOKtZpAsY2Z1oCQXaUpF4/9wAo/yE="
+        "MODULE.bazel": "sha256-h18uLIFSq1HqZGI0K7zMV2I+HebBO5nvfho6yNAoqB4="
     }
 }
