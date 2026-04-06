@@ -1,0 +1,25 @@
+--- /dev/null
++++ b/BUILD
+@@ -0,0 +1,22 @@
++load("@rules_cc//cc:defs.bzl", "cc_library")
++
++package(default_visibility = ["//visibility:public"])
++
++filegroup(
++    name = "all_srcs",
++    srcs = glob(["**"]),
++    visibility = ["//visibility:public"],
++)
++
++cc_library(
++     name = "mnn_headers",
++     hdrs = glob(
++         ["include/MNN/*.hpp"],
++     ) + glob([
++         "include/MNN/expr/*hpp",
++     ])  + glob([
++        "include/MNN/*h",
++    ]),
++     includes = ["include"],
++     visibility = ["//visibility:public"],
++ )

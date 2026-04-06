@@ -1,0 +1,10 @@
+{
+    "integrity": "sha256-o5VbRageJ9gluZdvyQv/FuBvhKiNQb5HYO6E2fPIo7I=",
+    "patch_strip": 1,
+    "patches": {
+        "add_build_file.patch": "sha256-681/K3tXQu/N8WiZfZ6OVQkOP2EQLPzdHTHHDtitbAQ=",
+        "add_module_dot_bazel.patch": "sha256-5ODvsQVSUTGAcxraQHc1eMgWtfjciMiMeGRmpypF+a8="
+    },
+    "strip_prefix": "MNN-3.4.1",
+    "url": "https://github.com/alibaba/MNN/archive/refs/tags/3.4.1.tar.gz"
+}

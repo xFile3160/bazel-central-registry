@@ -5,7 +5,9 @@
         "github:alibaba/MNN"
     ],
     "versions": [
-        "2.8.0"
+        "2.8.0",
+        "3.0.0",
+        "3.4.1"
     ],
     "yanked_versions": {}
 }

@@ -1,0 +1,10 @@
+matrix:
+  platform:
+    - ubuntu2004
+    - macos
+bcr_test_module:
+  module_path: ""
+  matrix:
+    platform:
+      - ubuntu2004
+      - macos
