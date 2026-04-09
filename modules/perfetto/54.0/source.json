@@ -1,0 +1,15 @@
+{
+    "url": "https://github.com/google/perfetto/archive/refs/tags/v54.0.tar.gz",
+    "strip_prefix": "perfetto-54.0",
+    "integrity": "sha256-imFE2BWS4A+5512kJIOiVEMVsl4xE4RVBdaZUAg5E8E=",
+    "patch_strip": 1,
+    "overlay": {
+        "MODULE.bazel": "sha256-EIsx2HEEYiXOVJqKCND7MCACNzJvci+CYBakC6bbo4w="
+    },
+    "patches": {
+        "bazel9-protoinfo-load.patch": "sha256-qOczV2lLPI6pTjg+BTwf1P40ekceoermhoTAOcDdtlY=",
+        "bazel9-rules-loads.patch": "sha256-BLYrlYJ3yXcLIjb8CgZ5OF4nqY5XO7mJp53j/GwMicw=",
+        "bazel9-dep-build-loads.patch": "sha256-sH1k6ZhrMkL8yubx2yCWBpswrPuJRSZgpeTcSvRcu/c=",
+        "bzlmod-descriptor-guard.patch": "sha256-TUpQSul64F6NoQHlsd8vPa25zpm6gEb2zM9wwwci20s="
+    }
+}

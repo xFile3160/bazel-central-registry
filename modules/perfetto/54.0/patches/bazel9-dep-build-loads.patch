@@ -1,0 +1,66 @@
+diff -ruN a/bazel/expat.BUILD b/bazel/expat.BUILD
+--- a/bazel/expat.BUILD	2026-04-09 11:49:41
++++ b/bazel/expat.BUILD	2026-04-09 11:49:43
+@@ -12,6 +12,7 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ 
++load("@rules_cc//cc:defs.bzl", "cc_library")
+ load("@perfetto_cfg//:perfetto_cfg.bzl", "PERFETTO_CONFIG")
+ 
+ cc_library(
+diff -ruN a/bazel/linenoise.BUILD b/bazel/linenoise.BUILD
+--- a/bazel/linenoise.BUILD	2026-04-09 11:49:41
++++ b/bazel/linenoise.BUILD	2026-04-09 11:49:43
+@@ -12,6 +12,7 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ 
++load("@rules_cc//cc:defs.bzl", "cc_library")
+ load("@perfetto_cfg//:perfetto_cfg.bzl", "PERFETTO_CONFIG")
+ 
+ cc_library(
+diff -ruN a/bazel/llvm_demangle.BUILD b/bazel/llvm_demangle.BUILD
+--- a/bazel/llvm_demangle.BUILD	2026-04-09 11:49:41
++++ b/bazel/llvm_demangle.BUILD	2026-04-09 11:49:43
+@@ -12,6 +12,7 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ 
++load("@rules_cc//cc:defs.bzl", "cc_library")
+ load("@perfetto_cfg//:perfetto_cfg.bzl", "PERFETTO_CONFIG")
+ 
+ cc_library(
+diff -ruN a/bazel/open_csd.BUILD b/bazel/open_csd.BUILD
+--- a/bazel/open_csd.BUILD	2026-04-09 11:49:41
++++ b/bazel/open_csd.BUILD	2026-04-09 11:49:43
+@@ -12,6 +12,7 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ 
++load("@rules_cc//cc:defs.bzl", "cc_library")
+ load("@perfetto_cfg//:perfetto_cfg.bzl", "PERFETTO_CONFIG")
+ 
+ cc_library(
+diff -ruN a/bazel/sqlite.BUILD b/bazel/sqlite.BUILD
+--- a/bazel/sqlite.BUILD	2026-04-09 11:49:41
++++ b/bazel/sqlite.BUILD	2026-04-09 11:49:43
+@@ -15,6 +15,7 @@
+ # This build file is used for both @perfetto_dep_sqlite and
+ # @perfetto_dep_sqlite_src.
+ 
++load("@rules_cc//cc:defs.bzl", "cc_library")
+ load("@perfetto_cfg//:perfetto_cfg.bzl", "PERFETTO_CONFIG")
+ 
+ # #############################
+diff -ruN a/bazel/zlib.BUILD b/bazel/zlib.BUILD
+--- a/bazel/zlib.BUILD	2026-04-09 11:49:41
++++ b/bazel/zlib.BUILD	2026-04-09 11:49:43
+@@ -12,6 +12,7 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ 
++load("@rules_cc//cc:defs.bzl", "cc_library")
+ load("@perfetto_cfg//:perfetto_cfg.bzl", "PERFETTO_CONFIG")
+ 
+ cc_library(
