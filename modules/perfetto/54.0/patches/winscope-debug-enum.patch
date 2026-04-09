@@ -1,0 +1,56 @@
+diff --git a/src/trace_processor/importers/proto/winscope/protolog_message_decoder.h b/src/trace_processor/importers/proto/winscope/protolog_message_decoder.h
+index c378cfa..19d9792 100644
+--- a/src/trace_processor/importers/proto/winscope/protolog_message_decoder.h
++++ b/src/trace_processor/importers/proto/winscope/protolog_message_decoder.h
+@@ -30,12 +30,12 @@
+ namespace perfetto::trace_processor::winscope {
+ 
+ enum ProtoLogLevel : int32_t {
+-  DEBUG = 1,
+-  VERBOSE = 2,
+-  INFO = 3,
+-  WARN = 4,
+-  ERROR = 5,
+-  WTF = 6,
++  kDebug = 1,
++  kVerbose = 2,
++  kInfo = 3,
++  kWarn = 4,
++  kError = 5,
++  kWtf = 6,
+ };
+ 
+ struct DecodedMessage {
+diff --git a/src/trace_processor/importers/proto/winscope/protolog_parser.cc b/src/trace_processor/importers/proto/winscope/protolog_parser.cc
+index 9e81182..87133e5 100644
+--- a/src/trace_processor/importers/proto/winscope/protolog_parser.cc
++++ b/src/trace_processor/importers/proto/winscope/protolog_parser.cc
+@@ -187,22 +187,22 @@ void ProtoLogParser::PopulateReservedRowWithMessage(
+ 
+   StringPool::Id level = log_level_unknown_string_id_;
+   switch (log_level) {
+-    case ProtoLogLevel::DEBUG:
++    case ProtoLogLevel::kDebug:
+       level = log_level_debug_string_id_;
+       break;
+-    case ProtoLogLevel::VERBOSE:
++    case ProtoLogLevel::kVerbose:
+       level = log_level_verbose_string_id_;
+       break;
+-    case ProtoLogLevel::INFO:
++    case ProtoLogLevel::kInfo:
+       level = log_level_info_string_id_;
+       break;
+-    case ProtoLogLevel::WARN:
++    case ProtoLogLevel::kWarn:
+       level = log_level_warn_string_id_;
+       break;
+-    case ProtoLogLevel::ERROR:
++    case ProtoLogLevel::kError:
+       level = log_level_error_string_id_;
+       break;
+-    case ProtoLogLevel::WTF:
++    case ProtoLogLevel::kWtf:
+       level = log_level_wtf_string_id_;
+       break;
+   }
