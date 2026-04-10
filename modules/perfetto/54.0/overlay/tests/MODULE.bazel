@@ -1,0 +1,7 @@
+bazel_dep(name = "perfetto")
+local_path_override(
+    module_name = "perfetto",
+    path = "..",
+)
+
+bazel_dep(name = "protobuf", version = "33.4")

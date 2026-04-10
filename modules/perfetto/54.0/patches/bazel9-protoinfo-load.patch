@@ -1,14 +1,11 @@
-diff --git a/bazel/proto_gen.bzl b/bazel/proto_gen.bzl
-index a751767..7624289 100644
+diff -ruN a/bazel/proto_gen.bzl b/bazel/proto_gen.bzl
 --- a/bazel/proto_gen.bzl
 +++ b/bazel/proto_gen.bzl
-@@ -13,6 +13,8 @@
- # limitations under the License.
+@@ -14,6 +14,7 @@
  
  # This file defines the proto_gen() rule that is used for generating protos
  # with custom plugins (ipc and protozero).
 +load("@com_google_protobuf//bazel/common:proto_info.bzl", "ProtoInfo")
-+
  
  def _proto_gen_impl(ctx):
      proto_src = [

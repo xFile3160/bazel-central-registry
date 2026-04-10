@@ -1,5 +1,5 @@
---- a/bazel/rules.bzl	2026-04-09 11:47:06
-+++ b/bazel/rules.bzl	2026-04-09 11:47:06
+--- a/bazel/rules.bzl
++++ b/bazel/rules.bzl
 @@ -12,10 +12,14 @@
  # See the License for the specific language governing permissions and
  # limitations under the License.
@@ -17,8 +17,37 @@
  
  # +----------------------------------------------------------------------------+
  # | Base C++ rules.                                                            |
-@@ -40,7 +44,7 @@
+@@ -38,9 +42,36 @@
+         }),
+     }
  
++_PROTOC_PLUGIN_DEPS = {
++    "cppgen_plugin": [
++        "@com_google_protobuf//src/google/protobuf/compiler:importer",
++        "@com_google_protobuf//src/google/protobuf/compiler:plugin",
++        "@com_google_protobuf//src/google/protobuf/io:printer",
++    ],
++    "ipc_plugin": [
++        "@com_google_protobuf//src/google/protobuf/compiler:plugin",
++        "@com_google_protobuf//src/google/protobuf/io:printer",
++    ],
++    "protozero_plugin": [
++        "@com_google_protobuf//src/google/protobuf/compiler:plugin",
++        "@com_google_protobuf//src/google/protobuf/io:printer",
++    ],
++}
++
++def _rewrite_standalone_protoc_plugin_deps(args):
++    name = args.get("name")
++    if name not in _PROTOC_PLUGIN_DEPS:
++        return args
++    args["deps"] = [
++        dep
++        for dep in args.get("deps", [])
++        if dep != "@com_google_protobuf//:protoc_lib"
++    ] + _PROTOC_PLUGIN_DEPS[name]
++    return args
++
  def perfetto_build_config_cc_library(**kwargs):
      if not _rule_override("cc_library", **kwargs):
 -        native.cc_library(**kwargs)
@@ -26,7 +55,7 @@
  
  def perfetto_filegroup(**kwargs):
      if not _rule_override("filegroup", **kwargs):
-@@ -53,20 +57,20 @@
+@@ -53,20 +84,20 @@
  def perfetto_cc_library(**kwargs):
      args = _merge_dicts(default_cc_args(), kwargs)
      if not _rule_override("cc_library", **args):
@@ -34,7 +63,8 @@
 +        cc_library(**args)
  
  def perfetto_cc_binary(**kwargs):
-     args = _merge_dicts(default_cc_args(), kwargs)
+-    args = _merge_dicts(default_cc_args(), kwargs)
++    args = _rewrite_standalone_protoc_plugin_deps(_merge_dicts(default_cc_args(), kwargs))
      if not _rule_override("cc_binary", **args):
 -        native.cc_binary(**args)
 +        cc_binary(**args)
@@ -51,7 +81,7 @@
  
  # +----------------------------------------------------------------------------+
  # | Proto-related rules                                                        |
-@@ -74,19 +78,19 @@
+@@ -74,19 +105,19 @@
  
  def perfetto_proto_library(**kwargs):
      if not _rule_override("proto_library", **kwargs):
@@ -75,7 +105,7 @@
  
  # Unlike the other rules, this is an noop by default because Bazel does not
  # support Go proto libraries.
-@@ -111,13 +115,23 @@
+@@ -111,13 +142,23 @@
  # +----------------------------------------------------------------------------+
  # | Android-related rules                                                      |
  # +----------------------------------------------------------------------------+
@@ -101,7 +131,7 @@
  
  def perfetto_android_jni_library(**kwargs):
      if not _rule_override("android_jni_library", **kwargs):
-@@ -152,18 +166,18 @@
+@@ -152,18 +193,18 @@
      # exclude them from being build when invoke `bazel build :all`,
      # since these targets won't be able to compile anyway, see
      # https://bazel.build/docs/android-ndk#cclibrary-android.
@@ -123,7 +153,7 @@
          name = name,
          srcs = [binary_target_name],
          target_compatible_with = ["@platforms//os:android"],
-@@ -171,7 +185,7 @@
+@@ -171,7 +212,7 @@
  
  def perfetto_android_instrumentation_test(**kwargs):
      if not _rule_override("android_instrumentation_test", **kwargs):

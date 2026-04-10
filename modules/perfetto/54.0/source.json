@@ -4,11 +4,12 @@
     "integrity": "sha256-imFE2BWS4A+5512kJIOiVEMVsl4xE4RVBdaZUAg5E8E=",
     "patch_strip": 1,
     "overlay": {
-        "MODULE.bazel": "sha256-EIsx2HEEYiXOVJqKCND7MCACNzJvci+CYBakC6bbo4w="
+        "MODULE.bazel": "sha256-EIsx2HEEYiXOVJqKCND7MCACNzJvci+CYBakC6bbo4w=",
+        "tests/MODULE.bazel": "sha256-cvxejTc5ufVBzt80G1Sm6ZgAJgLEscmb68+0NT4Usb4="
     },
     "patches": {
-        "bazel9-protoinfo-load.patch": "sha256-qOczV2lLPI6pTjg+BTwf1P40ekceoermhoTAOcDdtlY=",
-        "bazel9-rules-loads.patch": "sha256-BLYrlYJ3yXcLIjb8CgZ5OF4nqY5XO7mJp53j/GwMicw=",
+        "bazel9-protoinfo-load.patch": "sha256-oT4io59I6/Ag1RWmLSLQEhpadXxcIy5lHfWs/GKaqFQ=",
+        "bazel9-rules-loads.patch": "sha256-8eAzvXmrqlc3RBSCm8NU+Xq6Vt27f40ybSllbeUSEgU=",
         "bazel9-dep-build-loads.patch": "sha256-sH1k6ZhrMkL8yubx2yCWBpswrPuJRSZgpeTcSvRcu/c=",
         "bzlmod-descriptor-guard.patch": "sha256-TUpQSul64F6NoQHlsd8vPa25zpm6gEb2zM9wwwci20s=",
         "winscope-debug-enum.patch": "sha256-RDYghjZRxZevUOqDJVDIeguRsjqXUZ2Xcbw9NubftPE="
