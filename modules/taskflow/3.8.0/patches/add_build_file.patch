@@ -1,0 +1,19 @@
+--- /dev/null
++++ b/BUILD
+@@ -0,0 +1,16 @@
++load("@rules_cc//cc:defs.bzl", "cc_library")
++
++package(default_visibility = ["//visibility:public"])
++
++filegroup(
++    name = "all_srcs",
++    srcs = glob(["**"]),
++    visibility = ["//visibility:public"],
++)
++
++cc_library(
++    name = "taskflow",
++    hdrs = [":all_srcs"],
++    includes = ["taskflow", "."],
++    visibility = ["//visibility:public"],
++)

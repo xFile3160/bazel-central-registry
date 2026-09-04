@@ -1,0 +1,10 @@
+{
+    "integrity": "sha256-qZ+mNi5eI+fQi4pQVMSo2ONYtYYGf/JOiCMx5IHYs8k=",
+    "patch_strip": 1,
+    "patches": {
+        "add_build_file.patch": "sha256-t+86MhOG9dhDfV6wQ/ToMvNPoDdwcVBZ2qEztbNbYJU=",
+        "add_module_dot_bazel.patch": "sha256-J3/Zc8/yGF0nCOLQJ0PgUfrg8PaGyyjWDgYyLUzeC4o="
+    },
+    "strip_prefix": "frozen-1.2.0",
+    "url": "https://github.com/serge-sans-paille/frozen/archive/refs/tags/1.2.0.zip"
+}

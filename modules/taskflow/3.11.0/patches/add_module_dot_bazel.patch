@@ -1,0 +1,17 @@
+--- /dev/null
++++ b/MODULE.bazel
+@@ -0,0 +1,12 @@
++"""Module taskflow bzlmod dependency."""
++
++module(
++    name = "taskflow",
++    version = "3.11.0",
++    compatibility_level = 1,
++)
++
++bazel_dep(name = "rules_cc", version = "0.0.9")
++
++# to make sha256 work do this:
++# openssl dgst -sha256 -binary <file> | openssl base64 -A | sed 's/^/sha256-/'
+\ No newline at end of file
+

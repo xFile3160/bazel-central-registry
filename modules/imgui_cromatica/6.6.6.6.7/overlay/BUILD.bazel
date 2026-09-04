@@ -1,0 +1,45 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+cc_library(
+    name = "imgui",
+    srcs = [":core_srcs"],
+    hdrs = [":core_hdrs"],
+    include_prefix = "imgui",
+    strip_include_prefix = ".",
+    defines = ["IMGUI_ENABLE_DOCKING"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "core_srcs",
+    srcs = [
+        "imgui.cpp",
+        "imgui_demo.cpp",
+        "imgui_draw.cpp",
+        "imgui_tables.cpp",
+        "imgui_widgets.cpp",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "core_hdrs",
+    srcs = [
+        "imconfig.h",
+        "imgui.h",
+        "imgui_internal.h",
+        "imstb_rectpack.h",
+        "imstb_textedit.h",
+        "imstb_truetype.h",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "imgui_headers",
+    hdrs = [":core_hdrs"],
+    include_prefix = "imgui",
+    strip_include_prefix = ".",
+    defines = ["IMGUI_ENABLE_DOCKING"],
+    visibility = ["//visibility:public"],
+)

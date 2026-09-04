@@ -1,0 +1,11 @@
+{
+    "homepage": "https://github.com/libsdl-org/SDL",
+    "maintainers": [],
+    "repository": [
+        "github:libsdl-org/SDL"
+    ],
+    "versions": [
+        "3.2.14"
+    ],
+    "yanked_versions": {}
+}

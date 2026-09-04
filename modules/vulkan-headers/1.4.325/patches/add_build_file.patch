@@ -1,0 +1,42 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Cesare Mercurio <cesare.mercurio@gmail.com>
+Date: Thu, 8 Aug 2025 00:00:00 -0800
+Subject: [PATCH 1/2] Add BUILD file for Vulkan Headers
+
+Summary:
+Adds build file for bazel compilation of Vulkan-Headers
+
+Test Plan:
+Integration with cromatica project
+---
+ BUILD | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+ create mode 100644 BUILD
+
+diff --git a/BUILD b/BUILD
+new file mode 100644
+index 0000000..0000000
+--- /dev/null
++++ b/BUILD
+@@ -0,0 +1,19 @@
++load("@rules_cc//cc:defs.bzl", "cc_library")
++
++licenses(["notice"])
++
++exports_files(["LICENSE.md"])
++
++cc_library(
++    name = "vulkan_headers",
++    hdrs = glob([
++        "include/vulkan/*.h",
++        "include/vulkan/*.hpp",
++        "include/vk_video/*.h",
++    ]),
++    includes = ["include"],
++    visibility = ["//visibility:public"],
++    defines = [],
++)
++
++alias(name = "vulkan-headers", actual = ":vulkan_headers")
+-- 
+2.34.1

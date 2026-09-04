@@ -1,0 +1,589 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+package(default_visibility = ["//visibility:public"])
+
+# Backend source/header filegroups for per-platform selection.
+filegroup(
+    name = "backend_allegro5_srcs",
+    srcs = ["imgui_impl_allegro5.cpp"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_allegro5_hdrs",
+    srcs = ["imgui_impl_allegro5.h"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_android_srcs",
+    srcs = ["imgui_impl_android.cpp"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_android_hdrs",
+    srcs = ["imgui_impl_android.h"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_dx9_srcs",
+    srcs = ["imgui_impl_dx9.cpp"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_dx9_hdrs",
+    srcs = ["imgui_impl_dx9.h"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_dx10_srcs",
+    srcs = ["imgui_impl_dx10.cpp"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_dx10_hdrs",
+    srcs = ["imgui_impl_dx10.h"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_dx11_srcs",
+    srcs = ["imgui_impl_dx11.cpp"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_dx11_hdrs",
+    srcs = ["imgui_impl_dx11.h"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_dx12_srcs",
+    srcs = ["imgui_impl_dx12.cpp"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_dx12_hdrs",
+    srcs = ["imgui_impl_dx12.h"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_glfw_srcs",
+    srcs = ["imgui_impl_glfw.cpp"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_glfw_hdrs",
+    srcs = ["imgui_impl_glfw.h"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_glut_srcs",
+    srcs = ["imgui_impl_glut.cpp"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_glut_hdrs",
+    srcs = ["imgui_impl_glut.h"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_metal_srcs",
+    srcs = ["imgui_impl_metal.mm"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_metal_hdrs",
+    srcs = ["imgui_impl_metal.h"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_opengl2_srcs",
+    srcs = ["imgui_impl_opengl2.cpp"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_opengl2_hdrs",
+    srcs = ["imgui_impl_opengl2.h"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_opengl3_srcs",
+    srcs = ["imgui_impl_opengl3.cpp"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_opengl3_hdrs",
+    srcs = [
+        "imgui_impl_opengl3.h",
+        "imgui_impl_opengl3_loader.h",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_osx_srcs",
+    srcs = ["imgui_impl_osx.mm"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_osx_hdrs",
+    srcs = ["imgui_impl_osx.h"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_sdl2_srcs",
+    srcs = ["imgui_impl_sdl2.cpp"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_sdl2_hdrs",
+    srcs = ["imgui_impl_sdl2.h"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_sdl3_srcs",
+    srcs = ["imgui_impl_sdl3.cpp"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_sdl3_hdrs",
+    srcs = ["imgui_impl_sdl3.h"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_sdlrenderer2_srcs",
+    srcs = ["imgui_impl_sdlrenderer2.cpp"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_sdlrenderer2_hdrs",
+    srcs = ["imgui_impl_sdlrenderer2.h"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_sdlrenderer3_srcs",
+    srcs = ["imgui_impl_sdlrenderer3.cpp"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_sdlrenderer3_hdrs",
+    srcs = ["imgui_impl_sdlrenderer3.h"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_sdlgpu3_srcs",
+    srcs = ["imgui_impl_sdlgpu3.cpp"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_sdlgpu3_hdrs",
+    srcs = [
+        "imgui_impl_sdlgpu3.h",
+        "imgui_impl_sdlgpu3_shaders.h",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_vulkan_srcs",
+    srcs = ["imgui_impl_vulkan.cpp"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_vulkan_hdrs",
+    srcs = ["imgui_impl_vulkan.h"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_wgpu_srcs",
+    srcs = ["imgui_impl_wgpu.cpp"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_wgpu_hdrs",
+    srcs = ["imgui_impl_wgpu.h"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_win32_srcs",
+    srcs = ["imgui_impl_win32.cpp"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "backend_win32_hdrs",
+    srcs = ["imgui_impl_win32.h"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "sdl3_backend_srcs",
+    srcs = [
+        "imgui_impl_sdl3.cpp",
+        "imgui_impl_sdlrenderer3.cpp",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "sdl3_backend_hdrs",
+    srcs = [
+        "imgui_impl_sdl3.h",
+        "imgui_impl_sdlrenderer3.h",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+# Backend header-only libraries to make include paths selectable.
+cc_library(
+    name = "backend_allegro5_headers",
+    hdrs = [":backend_allegro5_hdrs"],
+    include_prefix = "imgui",
+    includes = ["."],
+)
+
+cc_library(
+    name = "backend_android_headers",
+    hdrs = [":backend_android_hdrs"],
+    include_prefix = "imgui",
+    includes = ["."],
+)
+
+cc_library(
+    name = "backend_dx9_headers",
+    hdrs = [":backend_dx9_hdrs"],
+    include_prefix = "imgui",
+    includes = ["."],
+)
+
+cc_library(
+    name = "backend_dx10_headers",
+    hdrs = [":backend_dx10_hdrs"],
+    include_prefix = "imgui",
+    includes = ["."],
+)
+
+cc_library(
+    name = "backend_dx11_headers",
+    hdrs = [":backend_dx11_hdrs"],
+    include_prefix = "imgui",
+    includes = ["."],
+)
+
+cc_library(
+    name = "backend_dx12_headers",
+    hdrs = [":backend_dx12_hdrs"],
+    include_prefix = "imgui",
+    includes = ["."],
+)
+
+cc_library(
+    name = "backend_glfw_headers",
+    hdrs = [":backend_glfw_hdrs"],
+    include_prefix = "imgui",
+    includes = ["."],
+)
+
+cc_library(
+    name = "backend_glut_headers",
+    hdrs = [":backend_glut_hdrs"],
+    include_prefix = "imgui",
+    includes = ["."],
+)
+
+cc_library(
+    name = "backend_metal_headers",
+    hdrs = [":backend_metal_hdrs"],
+    include_prefix = "imgui",
+    includes = ["."],
+)
+
+cc_library(
+    name = "backend_opengl2_headers",
+    hdrs = [":backend_opengl2_hdrs"],
+    include_prefix = "imgui",
+    includes = ["."],
+)
+
+cc_library(
+    name = "backend_opengl3_headers",
+    hdrs = [":backend_opengl3_hdrs"],
+    include_prefix = "imgui",
+    includes = ["."],
+)
+
+cc_library(
+    name = "backend_osx_headers",
+    hdrs = [":backend_osx_hdrs"],
+    include_prefix = "imgui",
+    includes = ["."],
+)
+
+cc_library(
+    name = "backend_sdl2_headers",
+    hdrs = [":backend_sdl2_hdrs"],
+    include_prefix = "imgui",
+    includes = ["."],
+)
+
+cc_library(
+    name = "backend_sdl3_headers",
+    hdrs = [":backend_sdl3_hdrs"],
+    include_prefix = "imgui",
+    includes = ["."],
+)
+
+cc_library(
+    name = "backend_sdlrenderer2_headers",
+    hdrs = [":backend_sdlrenderer2_hdrs"],
+    include_prefix = "imgui",
+    includes = ["."],
+)
+
+cc_library(
+    name = "backend_sdlrenderer3_headers",
+    hdrs = [":backend_sdlrenderer3_hdrs"],
+    include_prefix = "imgui",
+    includes = ["."],
+)
+
+cc_library(
+    name = "backend_sdlgpu3_headers",
+    hdrs = [":backend_sdlgpu3_hdrs"],
+    include_prefix = "imgui",
+    includes = ["."],
+)
+
+cc_library(
+    name = "backend_vulkan_headers",
+    hdrs = [":backend_vulkan_hdrs"],
+    include_prefix = "imgui",
+    includes = ["."],
+)
+
+cc_library(
+    name = "backend_wgpu_headers",
+    hdrs = [":backend_wgpu_hdrs"],
+    include_prefix = "imgui",
+    includes = ["."],
+)
+
+cc_library(
+    name = "backend_win32_headers",
+    hdrs = [":backend_win32_hdrs"],
+    include_prefix = "imgui",
+    includes = ["."],
+)
+
+cc_library(
+    name = "sdl3_backend_headers",
+    hdrs = [":sdl3_backend_hdrs"],
+    include_prefix = "imgui",
+    includes = ["."],
+)
+
+# Existing backend libraries (buildable on supported platforms).
+cc_library(
+    name = "platform-glfw",
+    srcs = ["imgui_impl_glfw.cpp"],
+    hdrs = ["imgui_impl_glfw.h"],
+    include_prefix = "imgui",
+    includes = ["."],
+    linkopts = select({
+        "@platforms//os:linux": [
+            "-lpthread",
+        ],
+        "//conditions:default": [],
+    }),
+    # TODO: Remove this section after adding Windows support to @glfw:
+    # https://registry.bazel.build/modules/glfw
+    target_compatible_with = select({
+        "@platforms//os:osx": [],
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//:imgui",
+        "@glfw",
+    ],
+)
+
+cc_library(
+    name = "platform-sdl3",
+    srcs = ["imgui_impl_sdl3.cpp"],
+    hdrs = ["imgui_impl_sdl3.h"],
+    include_prefix = "imgui",
+    includes = ["."],
+    deps = [
+        "//:imgui",
+        "@sdl3//:sdl3_headers",
+    ],
+)
+
+cc_library(
+    name = "renderer-sdlrenderer3",
+    srcs = ["imgui_impl_sdlrenderer3.cpp"],
+    hdrs = ["imgui_impl_sdlrenderer3.h"],
+    include_prefix = "imgui",
+    includes = ["."],
+    deps = [
+        "//:imgui",
+        "@sdl3//:sdl3_headers",
+    ],
+)
+
+cc_library(
+    name = "platform-win32",
+    srcs = ["imgui_impl_win32.cpp"],
+    hdrs = ["imgui_impl_win32.h"],
+    include_prefix = "imgui",
+    includes = ["."],
+    target_compatible_with = [
+        "@platforms//os:windows",
+    ],
+    deps = [
+        "//:imgui",
+    ],
+)
+
+cc_library(
+    name = "renderer-opengl3",
+    srcs = ["imgui_impl_opengl3.cpp"],
+    hdrs = [
+        "imgui_impl_opengl3.h",
+        "imgui_impl_opengl3_loader.h",
+    ],
+    include_prefix = "imgui",
+    includes = ["."],
+    linkopts = select({
+        "@rules_cc//cc/compiler:msvc-cl": [
+            "/DEFAULTLIB:opengl32",
+        ],
+        "@rules_cc//cc/compiler:clang-cl": [
+            "/DEFAULTLIB:opengl32",
+        ],
+        "@bazel_tools//src/conditions:linux_x86_64": [
+            "-lGL",
+            "-ldl",
+        ],
+        "//conditions:default": [],
+    }),
+    deps = [
+        "//:imgui",
+    ],
+)
+
+cc_library(
+    name = "renderer-dx9",
+    srcs = ["imgui_impl_dx9.cpp"],
+    hdrs = ["imgui_impl_dx9.h"],
+    include_prefix = "imgui",
+    includes = ["."],
+    linkopts = select({
+        "@rules_cc//cc/compiler:msvc-cl": [
+            "/DEFAULTLIB:D3D9",
+        ],
+        "@rules_cc//cc/compiler:clang-cl": [
+            "/DEFAULTLIB:D3D9",
+        ],
+    }),
+    target_compatible_with = [
+        "@platforms//os:windows",
+    ],
+    deps = ["//:imgui"],
+)
+
+cc_library(
+    name = "renderer-dx10",
+    srcs = ["imgui_impl_dx10.cpp"],
+    hdrs = ["imgui_impl_dx10.h"],
+    include_prefix = "imgui",
+    includes = ["."],
+    linkopts = select({
+        "@rules_cc//cc/compiler:msvc-cl": [
+            "/DEFAULTLIB:D3D10",
+        ],
+        "@rules_cc//cc/compiler:clang-cl": [
+            "/DEFAULTLIB:D3D10",
+        ],
+    }),
+    target_compatible_with = [
+        "@platforms//os:windows",
+    ],
+    deps = ["//:imgui"],
+)
+
+cc_library(
+    name = "renderer-dx11",
+    srcs = ["imgui_impl_dx11.cpp"],
+    hdrs = ["imgui_impl_dx11.h"],
+    include_prefix = "imgui",
+    includes = ["."],
+    linkopts = select({
+        "@rules_cc//cc/compiler:msvc-cl": [
+            "/DEFAULTLIB:D3D11",
+        ],
+        "@rules_cc//cc/compiler:clang-cl": [
+            "/DEFAULTLIB:D3D11",
+        ],
+    }),
+    target_compatible_with = [
+        "@platforms//os:windows",
+    ],
+    deps = ["//:imgui"],
+)
+
+cc_library(
+    name = "renderer-dx12",
+    srcs = ["imgui_impl_dx12.cpp"],
+    hdrs = ["imgui_impl_dx12.h"],
+    include_prefix = "imgui",
+    includes = ["."],
+    linkopts = select({
+        "@rules_cc//cc/compiler:msvc-cl": [
+            "/DEFAULTLIB:D3D12",
+            "/DEFAULTLIB:DXGI",
+        ],
+        "@rules_cc//cc/compiler:clang-cl": [
+            "/DEFAULTLIB:D3D12",
+            "/DEFAULTLIB:DXGI",
+        ],
+    }),
+    target_compatible_with = [
+        "@platforms//os:windows",
+    ],
+    deps = ["//:imgui"],
+)

@@ -1,0 +1,16 @@
+platforms:
+  centos7:
+    build_targets:
+    - '@sdl3//:sdl3'
+  debian10:
+    build_targets:
+    - '@sdl3//:sdl3'
+  macos:
+    build_targets:
+    - '@sdl3//:sdl3'
+  ubuntu2004:
+    build_targets:
+    - '@sdl3//:sdl3'
+  windows:
+    build_targets:
+    - '@sdl3//:sdl3'

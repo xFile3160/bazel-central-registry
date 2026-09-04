@@ -1,0 +1,16 @@
+platforms:
+  centos7:
+    build_targets:
+    - '@vulkan-hpp//:vulkan-hpp'
+  debian10:
+    build_targets:
+    - '@vulkan-hpp//:vulkan-hpp'
+  macos:
+    build_targets:
+    - '@vulkan-hpp//:vulkan-hpp'
+  ubuntu2004:
+    build_targets:
+    - '@vulkan-hpp//:vulkan-hpp'
+  windows:
+    build_targets:
+    - '@vulkan-hpp//:vulkan-hpp'
