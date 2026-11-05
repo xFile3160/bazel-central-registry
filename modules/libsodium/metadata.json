@@ -12,7 +12,8 @@
         "github:jedisct1/libsodium"
     ],
     "versions": [
-        "1.0.19"
+        "1.0.19",
+        "1.0.19.bcr.1"
     ],
     "yanked_versions": {}
 }
